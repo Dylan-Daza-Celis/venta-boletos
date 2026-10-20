@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/views/database.xsl"?>
+<eventos xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../schema/database.xsd">
+  <conciertos>
+    <concierto id="878e6df8-b27b-4beb-8390-0bc056b32087">
+      <nombre>YEM</nombre>
+      <artista>morat</artista>
+      <lugar>GNP</lugar>
+      <fecha>2026-12-11</fecha>
+      <hora>22:00:00</hora>
+      <descripcion>UNA NOCHE DE BAILE Y RECUERDOS INOLVIDABLE</descripcion>
+      <imagen>/images/morat.jpeg</imagen>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>1000</precio>
+          <disponibles>5</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>3000</precio>
+          <disponibles>1</disponibles>
+        </boleto>
+      </boletos>
+    </concierto>
+    <concierto id="7e89e73e-e995-45be-be55-226001dd3288">
+      <nombre>CAPUAVENTURES</nombre>
+      <artista>Nieto de Capulina</artista>
+      <lugar>CU</lugar>
+      <fecha>2026-12-12</fecha>
+      <hora>00:00:00</hora>
+      <imagen>/images/capulina.jpg</imagen>
+      <descripcion>Pasatela bien chicle bomba con el nietototote de capulinitititota</descripcion>
+      <generalPrecio>6700</generalPrecio>
+      <generalDisponibles>670</generalDisponibles>
+      <vipPrecio>6700</vipPrecio>
+      <vipDisponibles>67</vipDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>6700</precio>
+          <disponibles>670</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>6700</precio>
+          <disponibles>67</disponibles>
+        </boleto>
+      </boletos>
+    </concierto>
+    <concierto id="d937bc11-6db2-4377-8363-759eed44ded3">
+      <nombre>Los Guapos</nombre>
+      <artista>Mateo Yo Guapo</artista>
+      <lugar>GNP</lugar>
+      <fecha>2026-02-12</fecha>
+      <hora>21:00:00</hora>
+      <descripcion>Que me pota, Yo vapo</descripcion>
+      <imagen>/images/mateo.jpg</imagen>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>67</precio>
+          <disponibles>67</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>67</precio>
+          <disponibles>67</disponibles>
+        </boleto>
+      </boletos>
+    </concierto>
+  </conciertos>
+  <compras>
+    <compra id="718a6176-0d53-476a-aa7e-5d251b9010e0">
+      <conciertoId>878e6df8-b27b-4beb-8390-0bc056b32087</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>2</cantidad>
+      <nombreComprador>diego</nombreComprador>
+      <correo>diego@gmail.com</correo>
+      <telefono>2202140823</telefono>
+      <fechaCompra>2026-10-12T04:09:53.524Z</fechaCompra>
+    </compra>
+  </compras>
+  <usuarios>
+    <usuario id="cb057a4f-bba3-4fea-b69b-57677ab6a829">
+      <username>admin</username>
+      <password>5c1525569ffb8199a2386cfe8a59bdd9:eee00b442c50b74e0cab2fa56b3c3d7c72a4cd4753fcbcd9d00c91bc591caaacbc46b69a1f9864069b296a5c93b1c1d868fdd0b59975ee381f5f2e5d0dde6560</password>
+      <rol>admin</rol>
+    </usuario>
+    <usuario id="fb013cae-de6a-400c-8fc4-d9744a0b3dea">
+      <username>dylan</username>
+      <password>a2afb8162d9d1c22b1b50a216d6e8c63:b48b57ed7803473d9e909c3193a52fe3c8dcf6bdd528827d06b4b42c6e989912616cd00053845367c73591d9dbbcb97b69686f82db3535d2af0293bbe5320612</password>
+      <rol>usuario</rol>
+    </usuario>
+  </usuarios>
+</eventos>

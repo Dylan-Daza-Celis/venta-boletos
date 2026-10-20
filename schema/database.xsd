@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="eventos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="conciertos">
+          <xs:complexType><xs:sequence>
+            <xs:element name="concierto" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType><xs:sequence>
+                <xs:element name="nombre" type="xs:string"/>
+                <xs:element name="artista" type="xs:string"/>
+                <xs:element name="lugar" type="xs:string"/>
+                <xs:element name="fecha" type="xs:date"/>
+                <xs:element name="hora" type="xs:time"/>
+                <xs:element name="descripcion" type="xs:string" minOccurs="0"/>
+                <xs:element name="imagen" type="xs:anyURI" minOccurs="0"/>
+                <xs:element name="boletos"><xs:complexType><xs:sequence>
+                  <xs:element name="boleto" maxOccurs="unbounded"><xs:complexType><xs:sequence>
+                    <xs:element name="tipo" type="xs:string"/>
+                    <xs:element name="precio" type="xs:decimal"/>
+                    <xs:element name="disponibles" type="xs:nonNegativeInteger"/>
+                  </xs:sequence></xs:complexType></xs:element>
+                </xs:sequence></xs:complexType></xs:element>
+              </xs:sequence><xs:attribute name="id" type="xs:string" use="required"/></xs:complexType>
+            </xs:element>
+          </xs:sequence></xs:complexType>
+        </xs:element>
+        <xs:element name="compras"><xs:complexType><xs:sequence>
+          <xs:element name="compra" minOccurs="0" maxOccurs="unbounded"><xs:complexType><xs:sequence>
+            <xs:element name="conciertoId" type="xs:string"/>
+            <xs:element name="nombreComprador" type="xs:string"/>
+            <xs:element name="correo" type="xs:string"/>
+            <xs:element name="telefono" type="xs:string"/>
+            <xs:element name="tipoBoleto" type="xs:string"/>
+            <xs:element name="cantidad" type="xs:positiveInteger"/>
+            <xs:element name="fechaCompra" type="xs:dateTime"/>
+          </xs:sequence><xs:attribute name="id" type="xs:string" use="required"/></xs:complexType></xs:element>
+        </xs:sequence></xs:complexType></xs:element>
+        <xs:element name="usuarios" minOccurs="0"><xs:complexType><xs:sequence>
+          <xs:element name="usuario" minOccurs="0" maxOccurs="unbounded"><xs:complexType><xs:sequence>
+            <xs:element name="username" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+            <xs:element name="nombre" type="xs:string" minOccurs="0"/>
+            <xs:element name="apellidoPaterno" type="xs:string" minOccurs="0"/>
+            <xs:element name="apellidoMaterno" type="xs:string" minOccurs="0"/>
+            <xs:element name="diaNacimiento" type="xs:positiveInteger" minOccurs="0"/>
+            <xs:element name="mesNacimiento" type="xs:positiveInteger" minOccurs="0"/>
+            <xs:element name="anioNacimiento" type="xs:positiveInteger" minOccurs="0"/>
+            <xs:element name="genero" type="xs:string" minOccurs="0"/>
+            <xs:element name="correo" type="xs:string" minOccurs="0"/>
+            <xs:element name="telefono" type="xs:string" minOccurs="0"/>
+            <xs:element name="rol" type="xs:string"/>
+          </xs:sequence><xs:attribute name="id" type="xs:string" use="required"/></xs:complexType></xs:element>
+        </xs:sequence></xs:complexType></xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

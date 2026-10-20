@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:s="http://sonora.local/conciertos#">
+  <rdf:Description rdf:about="http://sonora.local/conciertos">
+    <s:tipo>Venta local de boletos para conciertos</s:tipo>
+    <s:contiene>conciertos, boletos y compras</s:contiene>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://sonora.local/concierto">
+    <s:tieneArtista>artista</s:tieneArtista>
+    <s:seRealizaEn>lugar</s:seRealizaEn>
+    <s:ofrece>boleto</s:ofrece>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://sonora.local/compra">
+    <s:correspondeA>concierto</s:correspondeA>
+    <s:incluye>boleto</s:incluye>
+    <s:realizadaPor>comprador</s:realizadaPor>
+  </rdf:Description>
+</rdf:RDF>
