@@ -48,6 +48,13 @@
       z-index: 1;
     }
 
+    .header-logout {
+      position: absolute;
+      bottom: 24px;
+      right: max(24px, calc((100% - 1160px) / 2));
+      z-index: 2;
+    }
+
     .eyebrow {
       color: var(--yellow);
       letter-spacing: 3px;
@@ -418,6 +425,7 @@
 </head>
 <body>
   <header>
+    <button class="logout header-logout" onclick="logout()">Cerrar sesión</button>
     <div class="eyebrow">Puebla · VENTA LOCAL DE BOLETOS</div>
     <h1>La música se vive <span>en vivo.</span></h1>
     <p>Descubre conciertos, compara zonas y reserva tu lugar.</p>
@@ -430,9 +438,9 @@
       <div class="links">
         <a class="action-button" href="/catalogo" target="_blank">Catálogo XSLT</a>
         <a class="action-button" href="/semantic/conciertos.rdf" target="_blank">Relaciones RDF</a>
+        <a class="action-button" href="/profile.html">Editar perfil</a>
         <a class="action-button" id="admin-register-link" href="/admin-register.html" hidden>Registrar Administrador</a>
       </div>
-      <button class="logout" onclick="logout()">Cerrar sesión</button>
     </div>
 
     <section class="panel" id="concert-admin-panel" hidden>
@@ -553,7 +561,10 @@
     let selectedPurchaseConcert = null;
 
     async function api(url, options) {
-      const response = await fetch(url, options);
+      const response = await fetch(url, {
+        cache: "no-store",
+        ...options
+      });
       const data = response.status === 204 ? null : await response.json();
 
       if (!response.ok) {

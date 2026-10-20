@@ -19,7 +19,7 @@
         <boleto>
           <tipo>VIP</tipo>
           <precio>3000</precio>
-          <disponibles>3</disponibles>
+          <disponibles>0</disponibles>
         </boleto>
       </boletos>
     </concierto>
@@ -65,12 +65,27 @@
         <boleto>
           <tipo>VIP</tipo>
           <precio>67</precio>
-          <disponibles>67</disponibles>
+          <disponibles>66</disponibles>
         </boleto>
       </boletos>
     </concierto>
   </conciertos>
-  <compras/>
+  <compras>
+    <compra id="c7012054-3d03-497e-9cdd-8c360e3a5c22">
+      <conciertoId>878e6df8-b27b-4beb-8390-0bc056b32087</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>3</cantidad>
+      <fechaCompra>2026-10-20T21:49:08.403Z</fechaCompra>
+      <usuarioId>768806c8-86ba-4a3f-ad11-5e18ba05cb13</usuarioId>
+    </compra>
+    <compra id="6fab209b-fa3f-4d24-a788-aa2490881f52">
+      <conciertoId>d937bc11-6db2-4377-8363-759eed44ded3</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T22:01:07.178Z</fechaCompra>
+      <usuarioId>0cbdf491-8f2f-465b-ab33-f1cbe95659e6</usuarioId>
+    </compra>
+  </compras>
   <usuarios>
     <usuario id="cb057a4f-bba3-4fea-b69b-57677ab6a829">
       <username>admin</username>
@@ -80,6 +95,34 @@
     <usuario id="fb013cae-de6a-400c-8fc4-d9744a0b3dea">
       <username>dylan</username>
       <password>a2afb8162d9d1c22b1b50a216d6e8c63:b48b57ed7803473d9e909c3193a52fe3c8dcf6bdd528827d06b4b42c6e989912616cd00053845367c73591d9dbbcb97b69686f82db3535d2af0293bbe5320612</password>
+      <rol>usuario</rol>
+    </usuario>
+    <usuario id="768806c8-86ba-4a3f-ad11-5e18ba05cb13">
+      <username>dylan_clss</username>
+      <password>825c0cebea201985ff4f0c9e3195a875:c81f5da2ff2990f0b0b796b32673bc0c88624fe2872bb76a5bbedde8660d41039f394fc8cdc7951af3b087a708dc98adab8d93da4f52a12fbfbdacb19083cbcd</password>
+      <nombre>Dylan</nombre>
+      <apellidoPaterno>Daza</apellidoPaterno>
+      <apellidoMaterno>Celis</apellidoMaterno>
+      <diaNacimiento>17</diaNacimiento>
+      <mesNacimiento>5</mesNacimiento>
+      <anioNacimiento>2004</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>dylancelis6a@gmail.com</correo>
+      <telefono>2214403318</telefono>
+      <rol>usuario</rol>
+    </usuario>
+    <usuario id="0cbdf491-8f2f-465b-ab33-f1cbe95659e6">
+      <username>diego</username>
+      <password>4ab02f5edcba5ed681c281d2084bc05b:6c5528c00292908cf8e6fe54bf4d1d5ce20afdd12fbcc4edf2bf08348fa48441f01765cb83491202c2d5200ab03fd50d139689e0606bc6e2863fc6b6994318f6</password>
+      <nombre>Diego</nombre>
+      <apellidoPaterno>Gonzalz</apellidoPaterno>
+      <apellidoMaterno>Camarillo</apellidoMaterno>
+      <diaNacimiento>26</diaNacimiento>
+      <mesNacimiento>2</mesNacimiento>
+      <anioNacimiento>2004</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>diegogonzalezcamarillo@gmail.com</correo>
+      <telefono>2202140823</telefono>
       <rol>usuario</rol>
     </usuario>
   </usuarios>

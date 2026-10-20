@@ -28,12 +28,10 @@
         <xs:element name="compras"><xs:complexType><xs:sequence>
           <xs:element name="compra" minOccurs="0" maxOccurs="unbounded"><xs:complexType><xs:sequence>
             <xs:element name="conciertoId" type="xs:string"/>
-            <xs:element name="nombreComprador" type="xs:string"/>
-            <xs:element name="correo" type="xs:string"/>
-            <xs:element name="telefono" type="xs:string"/>
             <xs:element name="tipoBoleto" type="xs:string"/>
             <xs:element name="cantidad" type="xs:positiveInteger"/>
             <xs:element name="fechaCompra" type="xs:dateTime"/>
+            <xs:element name="usuarioId" type="xs:string"/>
           </xs:sequence><xs:attribute name="id" type="xs:string" use="required"/></xs:complexType></xs:element>
         </xs:sequence></xs:complexType></xs:element>
         <xs:element name="usuarios" minOccurs="0"><xs:complexType><xs:sequence>

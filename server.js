@@ -29,12 +29,13 @@ const resourceConfig = {
   },
   compras: {
     singular: "compra",
-    required: ["conciertoId", "nombreComprador", "correo", "telefono", "tipoBoleto", "cantidad"]
+    required: ["conciertoId", "tipoBoleto", "cantidad"]
   }
 };
 
 async function readDatabase() {
   const database = parser.parse(await fs.readFile(dataFile, "utf8"));
+  let migratedPurchases = false;
   database.eventos ||= {};
   database.eventos.usuarios ||= {};
   database.eventos.usuarios.usuario = asArray(database.eventos.usuarios.usuario);
@@ -45,6 +46,23 @@ async function readDatabase() {
       password: hashPassword("admin"),
       rol: "admin"
     });
+    migratedPurchases = true;
+  }
+  const users = usersOf(database);
+  for (const purchase of collection(database, "compras")) {
+    if (!purchase.usuarioId && purchase.usuario) {
+      const legacyUser = users.find((user) => user.username === purchase.usuario);
+      if (legacyUser) {
+        purchase.usuarioId = itemId(legacyUser);
+        delete purchase.usuario;
+        delete purchase.nombreComprador;
+        delete purchase.correo;
+        delete purchase.telefono;
+        migratedPurchases = true;
+      }
+    }
+  }
+  if (migratedPurchases) {
     await writeDatabase(database);
   }
   return database;
@@ -68,6 +86,14 @@ function usersOf(database) {
 
 function userDetails(database, username) {
   return usersOf(database).find((user) => user.username === username);
+}
+
+function userById(database, id) {
+  return usersOf(database).find((user) => itemId(user) === id);
+}
+
+function sessionUserDetails(database, sessionUser) {
+  return userById(database, sessionUser.id) || userDetails(database, sessionUser.username);
 }
 
 function isAdult(day, month, year) {
@@ -136,8 +162,21 @@ function publicItem(item) {
     result.id = result["@_id"];
     delete result["@_id"];
   }
+
   if (result.boletos) result.boletos = ticketsOf(result);
   return result;
+}
+
+function publicPurchase(database, purchase) {
+  const user = userById(database, purchase.usuarioId);
+  return {
+    ...publicItem(purchase),
+    nombreComprador: user
+      ? [user.nombre, user.apellidoPaterno, user.apellidoMaterno].filter(Boolean).join(" ") || user.username
+      : purchase.nombreComprador || "Usuario no disponible",
+    correo: user?.correo || purchase.correo || "",
+    telefono: user?.telefono || purchase.telefono || ""
+  };
 }
 
 async function writeDatabase(database) {
@@ -161,7 +200,9 @@ function collection(database, resource) {
 }
 
 function userOwnsPurchase(purchase, user) {
-  return user?.rol === "admin" || purchase.usuario === user?.username;
+  return user?.rol === "admin"
+    || purchase.usuarioId === user?.id
+    || purchase.usuario === user?.username;
 }
 
 function purchasesFor(database, concertId) {
@@ -242,7 +283,13 @@ app.get("/catalogo", async (req, res, next) => {
     if (!user) return res.redirect("/login.html?returnTo=%2Fcatalogo");
     const database = await readDatabase();
     const purchases = collection(database, "compras").filter((purchase) => userOwnsPurchase(purchase, user));
-    database.eventos.compras = { compra: purchases };
+    database.eventos.compras = {
+      compra: purchases.map((purchase) => {
+        const visiblePurchase = publicPurchase(database, purchase);
+        delete visiblePurchase.id;
+        return { "@_id": itemId(purchase), ...visiblePurchase };
+      })
+    };
     const xml = builder.build(database)
       .replace(/^<\?xml[^>]*>\s*/i, "")
       .replace(/^<\?xml-stylesheet[^>]*>\s*/i, "");
@@ -270,7 +317,21 @@ app.get("/api/imagenes", async (req, res, next) => {
 
 app.get("/api/auth/me", (req, res) => {
   const user = currentUser(req);
-  res.json(user ? { username: user.username, rol: user.rol } : null);
+  if (!user) return res.json(null);
+  readDatabase()
+    .then((database) => {
+      const profile = sessionUserDetails(database, user);
+      if (!profile) return res.json(null);
+      const { password, ...safeProfile } = profile;
+      res.json({
+        ...publicItem(safeProfile),
+        perfilCompleto: !validateUserDetails(profile)
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ error: "No fue posible cargar el perfil." });
+    });
 });
 
 app.post("/api/auth/login", async (req, res, next) => {
@@ -283,7 +344,7 @@ app.post("/api/auth/login", async (req, res, next) => {
       return res.status(401).json({ error: "Usuario o contraseña incorrectos." });
     }
     const token = randomUUID();
-    sessions.set(token, { username: user.username, email: user.correo, rol: user.rol });
+    sessions.set(token, { id: itemId(user), username: user.username, email: user.correo, rol: user.rol });
     res.setHeader("Set-Cookie", `sonora_session=${token}; HttpOnly; Path=/; SameSite=Lax`);
     res.json({ username: user.username, rol: user.rol });
   } catch (error) {
@@ -341,6 +402,68 @@ async function createUser(req, res, next, role) {
 app.post("/api/auth/register", (req, res, next) => createUser(req, res, next, "usuario"));
 app.post("/api/auth/admins", (req, res, next) => createUser(req, res, next, "admin"));
 
+app.put("/api/auth/profile", async (req, res, next) => {
+  try {
+    const sessionUser = requireAuth(req, res);
+    if (!sessionUser) return;
+    const database = await readDatabase();
+    const users = usersOf(database);
+    const userIndexById = users.findIndex((user) => itemId(user) === sessionUser.id);
+    const index = userIndexById === -1
+      ? users.findIndex((user) => user.username === sessionUser.username)
+      : userIndexById;
+    if (index === -1) return res.status(404).json({ error: "Usuario no encontrado." });
+
+    const current = users[index];
+    const username = String(req.body.username || "").trim();
+    const details = { ...req.body, username };
+    if (!username || username.length < 3) {
+      return res.status(400).json({ error: "El usuario debe tener al menos 3 caracteres." });
+    }
+    const detailsError = validateUserDetails(details);
+    if (detailsError) return res.status(400).json({ error: detailsError });
+    if (users.some((user, userIndex) => userIndex !== index && user.username === username)) {
+      return res.status(409).json({ error: "Ese nombre de usuario ya está registrado." });
+    }
+    if (users.some((user, userIndex) => userIndex !== index
+      && user.correo?.toLowerCase() === String(details.correo).toLowerCase())) {
+      return res.status(409).json({ error: "Ese correo electrónico ya está registrado." });
+    }
+
+    users[index] = {
+      ...current,
+      username,
+      nombre: details.nombre,
+      apellidoPaterno: details.apellidoPaterno,
+      apellidoMaterno: details.apellidoMaterno,
+      diaNacimiento: details.diaNacimiento,
+      mesNacimiento: details.mesNacimiento,
+      anioNacimiento: details.anioNacimiento,
+      genero: details.genero,
+      correo: details.correo,
+      telefono: details.telefono
+    };
+    if (details.password) {
+      if (String(details.password).length < 4) {
+        return res.status(400).json({ error: "La contraseña debe tener al menos 4 caracteres." });
+      }
+      users[index].password = hashPassword(details.password);
+    }
+    if (username !== sessionUser.username) {
+      sessions.forEach((value, token) => {
+        if (value.username === sessionUser.username) {
+          sessions.set(token, { ...value, username, email: details.correo });
+        }
+      });
+    }
+    await writeDatabase(database);
+    const { password, ...safeProfile } = users[index];
+    res.json(publicItem(safeProfile));
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get("/api/:resource", async (req, res, next) => {
   try {
     if (!resourceConfig[req.params.resource]) return res.status(404).json({ error: "Recurso no encontrado." });
@@ -348,7 +471,10 @@ app.get("/api/:resource", async (req, res, next) => {
     if (req.params.resource === "compras" && !user) return;
     const database = await readDatabase();
     let items = collection(database, req.params.resource);
-    if (req.params.resource === "compras") items = items.filter((purchase) => userOwnsPurchase(purchase, user));
+    if (req.params.resource === "compras") {
+      items = items.filter((purchase) => userOwnsPurchase(purchase, user));
+      return res.json(items.map((purchase) => publicPurchase(database, purchase)));
+    }
     res.json(items.map(publicItem));
   } catch (error) {
     next(error);
@@ -361,18 +487,8 @@ app.post("/api/:resource", async (req, res, next) => {
     const user = req.params.resource === "conciertos" ? requireRole(req, res, "admin") : requireAuth(req, res);
     if (!user) return;
     const database = await readDatabase();
-    const authenticatedUser = req.params.resource === "compras"
-      ? userDetails(database, user.username)
-      : null;
     const requestItem = req.params.resource === "compras"
-      ? {
-          ...req.body,
-          nombreComprador: [authenticatedUser?.nombre, authenticatedUser?.apellidoPaterno, authenticatedUser?.apellidoMaterno]
-            .filter(Boolean)
-            .join(" ") || user.username,
-          correo: authenticatedUser?.correo || `${user.username}@local.invalid`,
-          telefono: authenticatedUser?.telefono || "No registrado"
-        }
+      ? { conciertoId: req.body.conciertoId, tipoBoleto: req.body.tipoBoleto, cantidad: req.body.cantidad }
       : req.body;
     const validationError = validateItem(req.params.resource, requestItem, database);
     if (validationError) return res.status(400).json({ error: validationError });
@@ -391,14 +507,19 @@ app.post("/api/:resource", async (req, res, next) => {
       const ticket = ticketsOf(concert).find((value) => value.tipo === item.tipoBoleto);
       ticket.disponibles = Number(ticket.disponibles) - Number(item.cantidad);
       item.fechaCompra = new Date().toISOString();
-      item.usuario = user.username;
+      item.usuarioId = user.id;
+      delete item.nombreComprador;
+      delete item.correo;
+      delete item.telefono;
       saveCollection(database, "conciertos", collection(database, "conciertos"));
     }
     const items = collection(database, req.params.resource);
     items.push(item);
     saveCollection(database, req.params.resource, items);
     await writeDatabase(database);
-    res.status(201).json(publicItem(item));
+    res.status(201).json(req.params.resource === "compras"
+      ? publicPurchase(database, item)
+      : publicItem(item));
   } catch (error) {
     next(error);
   }
@@ -417,18 +538,8 @@ app.put("/api/:resource/:id", async (req, res, next) => {
       return res.status(403).json({ error: "Solo puedes modificar tus propias compras." });
     }
 
-    const authenticatedUser = req.params.resource === "compras"
-      ? userDetails(database, user.username)
-      : null;
     const requestItem = req.params.resource === "compras"
-      ? {
-          ...req.body,
-          nombreComprador: [authenticatedUser?.nombre, authenticatedUser?.apellidoPaterno, authenticatedUser?.apellidoMaterno]
-            .filter(Boolean)
-            .join(" ") || items[index].nombreComprador || user.username,
-          correo: authenticatedUser?.correo || items[index].correo,
-          telefono: authenticatedUser?.telefono || items[index].telefono
-        }
+      ? { conciertoId: req.body.conciertoId, tipoBoleto: req.body.tipoBoleto, cantidad: req.body.cantidad }
       : req.body;
     const updated = { "@_id": req.params.id, ...requestItem };
     if (req.params.resource === "conciertos") {
@@ -437,7 +548,10 @@ app.put("/api/:resource/:id", async (req, res, next) => {
     }
     if (req.params.resource === "compras") {
       updated.fechaCompra = items[index].fechaCompra;
-      updated.usuario = items[index].usuario || user.username;
+      updated.usuarioId = items[index].usuarioId || user.id;
+      delete updated.nombreComprador;
+      delete updated.correo;
+      delete updated.telefono;
     }
 
     const validationError = validateItem(req.params.resource, updated, database);
@@ -457,7 +571,9 @@ app.put("/api/:resource/:id", async (req, res, next) => {
     items[index] = updated;
     saveCollection(database, req.params.resource, items);
     await writeDatabase(database);
-    res.json(publicItem(updated));
+    res.json(req.params.resource === "compras"
+      ? publicPurchase(database, updated)
+      : publicItem(updated));
   } catch (error) {
     next(error);
   }
