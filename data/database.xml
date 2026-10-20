@@ -19,7 +19,7 @@
         <boleto>
           <tipo>VIP</tipo>
           <precio>3000</precio>
-          <disponibles>1</disponibles>
+          <disponibles>3</disponibles>
         </boleto>
       </boletos>
     </concierto>
@@ -70,17 +70,7 @@
       </boletos>
     </concierto>
   </conciertos>
-  <compras>
-    <compra id="718a6176-0d53-476a-aa7e-5d251b9010e0">
-      <conciertoId>878e6df8-b27b-4beb-8390-0bc056b32087</conciertoId>
-      <tipoBoleto>VIP</tipoBoleto>
-      <cantidad>2</cantidad>
-      <nombreComprador>diego</nombreComprador>
-      <correo>diego@gmail.com</correo>
-      <telefono>2202140823</telefono>
-      <fechaCompra>2026-10-12T04:09:53.524Z</fechaCompra>
-    </compra>
-  </compras>
+  <compras/>
   <usuarios>
     <usuario id="cb057a4f-bba3-4fea-b69b-57677ab6a829">
       <username>admin</username>

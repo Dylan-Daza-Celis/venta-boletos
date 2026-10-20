@@ -66,6 +66,10 @@ function usersOf(database) {
   return asArray(database.eventos?.usuarios?.usuario);
 }
 
+function userDetails(database, username) {
+  return usersOf(database).find((user) => user.username === username);
+}
+
 function isAdult(day, month, year) {
   const birthDate = new Date(Number(year), Number(month) - 1, Number(day));
   if (
@@ -357,12 +361,25 @@ app.post("/api/:resource", async (req, res, next) => {
     const user = req.params.resource === "conciertos" ? requireRole(req, res, "admin") : requireAuth(req, res);
     if (!user) return;
     const database = await readDatabase();
-    const validationError = validateItem(req.params.resource, req.body, database);
+    const authenticatedUser = req.params.resource === "compras"
+      ? userDetails(database, user.username)
+      : null;
+    const requestItem = req.params.resource === "compras"
+      ? {
+          ...req.body,
+          nombreComprador: [authenticatedUser?.nombre, authenticatedUser?.apellidoPaterno, authenticatedUser?.apellidoMaterno]
+            .filter(Boolean)
+            .join(" ") || user.username,
+          correo: authenticatedUser?.correo || `${user.username}@local.invalid`,
+          telefono: authenticatedUser?.telefono || "No registrado"
+        }
+      : req.body;
+    const validationError = validateItem(req.params.resource, requestItem, database);
     if (validationError) return res.status(400).json({ error: validationError });
 
-    const item = { "@_id": randomUUID(), ...req.body };
+    const item = { "@_id": randomUUID(), ...requestItem };
     if (req.params.resource === "conciertos") {
-      const { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos } = req.body;
+      const { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos } = requestItem;
       Object.assign(item, { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos });
       item.boletos = { boleto: asArray(boletos) };
       for (const field of ["generalPrecio", "generalDisponibles", "vipPrecio", "vipDisponibles"]) {
@@ -400,9 +417,22 @@ app.put("/api/:resource/:id", async (req, res, next) => {
       return res.status(403).json({ error: "Solo puedes modificar tus propias compras." });
     }
 
-    const updated = { "@_id": req.params.id, ...req.body };
+    const authenticatedUser = req.params.resource === "compras"
+      ? userDetails(database, user.username)
+      : null;
+    const requestItem = req.params.resource === "compras"
+      ? {
+          ...req.body,
+          nombreComprador: [authenticatedUser?.nombre, authenticatedUser?.apellidoPaterno, authenticatedUser?.apellidoMaterno]
+            .filter(Boolean)
+            .join(" ") || items[index].nombreComprador || user.username,
+          correo: authenticatedUser?.correo || items[index].correo,
+          telefono: authenticatedUser?.telefono || items[index].telefono
+        }
+      : req.body;
+    const updated = { "@_id": req.params.id, ...requestItem };
     if (req.params.resource === "conciertos") {
-      const { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos } = req.body;
+      const { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos } = requestItem;
       Object.assign(updated, { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos: { boleto: asArray(boletos) } });
     }
     if (req.params.resource === "compras") {

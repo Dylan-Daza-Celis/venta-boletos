@@ -1,56 +1,906 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Puebla | Boletos de conciertos</title>
   <style>
-    :root{--bg:#0d0d15;--panel:#191826;--panel2:#242238;--line:#383451;--pink:#ff4f9a;--yellow:#ffd166;--cyan:#61dafb;--text:#fff9f1;--muted:#aaa6bd}
-    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#49234c 0,#0d0d15 44%);color:var(--text);font:16px system-ui,sans-serif}
-    header{position:relative;isolation:isolate;min-height:390px;padding:76px max(24px,calc((100% - 1160px)/2));border-bottom:1px solid var(--line);background:linear-gradient(90deg,#0d0d15f5 0%,#0d0d1599 58%,#0d0d1544 100%),url("/images/header.jfif") center/cover no-repeat}header>*{position:relative;z-index:1}.eyebrow{color:var(--yellow);letter-spacing:3px;font-weight:800}h1{font-size:clamp(42px,8vw,88px);line-height:.9;max-width:750px;margin:18px 0}h1 span{color:var(--pink)}main{max-width:1160px;margin:auto;padding:28px 24px 70px}
-    .toolbar,.links{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:22px}.links{margin:0}.links a,a{color:var(--yellow)}button,input{font:inherit;border-radius:9px;padding:11px 13px;border:1px solid var(--line)}button{background:var(--yellow);border:0;color:#17131b;font-weight:800;cursor:pointer}button.secondary{background:var(--panel);color:var(--text);border:1px solid var(--line)}button.danger{background:#a52f57;color:white}
-    .panel{background:#191826e8;border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:24px;box-shadow:0 18px 50px #0004}.panel h2{margin-top:0}.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}label{color:var(--muted);font-size:13px}label input{display:block;width:100%;margin-top:5px;background:#10101a;color:var(--text)}.wide{grid-column:1/-1}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:22px}.card{background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:19px;position:relative}.card:before{content:"LIVE";position:absolute;top:15px;left:15px;z-index:2;color:var(--pink);font-weight:800;font-size:11px;letter-spacing:2px;text-shadow:0 1px 4px #000}.card h3{margin:7px 0 12px;font-size:24px}.card p{color:var(--muted);margin:7px 0}.card strong{color:var(--yellow)}.concert-card{display:grid;grid-template-columns:minmax(190px,40%) minmax(0,1fr);grid-template-rows:minmax(300px,1fr) auto;gap:0 24px;overflow:hidden;padding:0}.concert-info{min-width:0;padding:30px 24px 24px 0}.card-image,.card-placeholder{width:100%;height:100%;min-height:300px;max-height:420px;object-fit:cover;margin:0;border-radius:14px 0 0 14px}.card-placeholder{display:grid;place-items:center;background:linear-gradient(145deg,#3c2050,#111725);color:var(--pink);font-size:28px;font-weight:900;letter-spacing:4px}.ticket{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid var(--line);padding:11px 0}.ticket button{padding:6px 9px;font-size:13px;white-space:nowrap}.concert-actions{grid-column:1/-1;padding:14px 24px;border-top:1px solid var(--line)}.compare{overflow-x:auto}.compare table{width:100%;border-collapse:collapse}.compare th,.compare td{text-align:left;padding:13px;border-bottom:1px solid var(--line)}.compare th{color:var(--cyan)}select{width:100%;background:#10101a;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:10px}.empty{color:var(--muted)}#message{color:var(--yellow);min-height:24px}@media(max-width:900px){.cards{grid-template-columns:1fr}.concert-card{grid-template-columns:minmax(180px,35%) minmax(0,1fr)}}@media(max-width:650px){.concert-card{display:block;padding:0}.card-image,.card-placeholder{height:230px;min-height:0;max-height:none;border-radius:14px 14px 0 0}.concert-info{padding:28px 20px 20px}.concert-actions{padding:14px 20px}.concert-actions button{margin-bottom:6px}}
-    .purchase{border-left-color:var(--cyan)}.purchase:before{content:"COMPRA CONFIRMADA";color:var(--cyan)}
-    .user-status{color:var(--cyan);font-weight:700}
+    :root {
+      --bg: #0d0d15;
+      --panel: #191826;
+      --panel2: #242238;
+      --line: #383451;
+      --pink: #ff4f9a;
+      --yellow: #ffd166;
+      --cyan: #61dafb;
+      --text: #fff9f1;
+      --muted: #aaa6bd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 80% 0, #49234c 0, var(--bg) 44%);
+      color: var(--text);
+      font: 16px system-ui, sans-serif;
+    }
+
+    header {
+      position: relative;
+      isolation: isolate;
+      min-height: 390px;
+      padding: 76px max(24px, calc((100% - 1160px) / 2));
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, #0d0d15f5 0%, #0d0d1599 58%, #0d0d1544 100%),
+        url("/images/header.jfif") center / cover no-repeat;
+    }
+
+    header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      color: var(--yellow);
+      letter-spacing: 3px;
+      font-weight: 800;
+    }
+
+    h1 {
+      max-width: 750px;
+      margin: 18px 0;
+      font-size: clamp(42px, 8vw, 88px);
+      line-height: .9;
+    }
+
+    h1 span {
+      color: var(--pink);
+    }
+
+    main {
+      max-width: 1160px;
+      margin: auto;
+      padding: 28px 24px 70px;
+    }
+
+    .toolbar,
+    .links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .links {
+      margin: 0;
+    }
+
+    .links a,
+    a {
+      color: var(--yellow);
+    }
+
+    button,
+    input {
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      background: var(--yellow);
+      color: #17131b;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    button.danger,
+    button.logout {
+      background: #a52f57;
+      color: white;
+    }
+
+    button.logout {
+      border-color: #a52f57;
+    }
+
+    .links a.action-button {
+      display: inline-block;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--panel);
+      color: var(--text);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .links a.action-button:hover {
+      background: var(--card);
+    }
+
+    .panel {
+      margin-bottom: 24px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #191826e8;
+      box-shadow: 0 18px 50px #0004;
+    }
+
+    .panel h2 {
+      margin-top: 0;
+    }
+
+    .form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    label input {
+      display: block;
+      width: 100%;
+      margin-top: 5px;
+      background: #10101a;
+      color: var(--text);
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      position: relative;
+      padding: 19px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--panel2);
+    }
+
+    .card::before {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 2;
+      color: var(--pink);
+      content: "LIVE";
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-shadow: 0 1px 4px #000;
+    }
+
+    .card h3 {
+      margin: 7px 0 12px;
+      font-size: 24px;
+    }
+
+    .card p {
+      margin: 7px 0;
+      color: var(--muted);
+    }
+
+    .card strong {
+      color: var(--yellow);
+    }
+
+    .concert-card {
+      display: grid;
+      grid-template-columns: minmax(190px, 40%) minmax(0, 1fr);
+      grid-template-rows: minmax(300px, 1fr) auto;
+      gap: 0 24px;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .concert-info {
+      min-width: 0;
+      padding: 30px 24px 24px 0;
+    }
+
+    .card-image,
+    .card-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 300px;
+      max-height: 420px;
+      margin: 0;
+      border-radius: 14px 0 0 14px;
+      object-fit: cover;
+    }
+
+    .card-placeholder {
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #3c2050, #111725);
+      color: var(--pink);
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 4px;
+    }
+
+    .ticket {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .ticket button {
+      padding: 6px 9px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .concert-actions {
+      grid-column: 1 / -1;
+      padding: 14px 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .compare {
+      overflow-x: auto;
+    }
+
+    .compare table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .compare th,
+    .compare td {
+      padding: 13px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .compare th {
+      color: var(--cyan);
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #10101a;
+      color: var(--text);
+    }
+
+    .empty {
+      color: var(--muted);
+    }
+
+    #message {
+      min-height: 24px;
+      color: var(--yellow);
+    }
+
+    .purchase {
+      border-left-color: var(--cyan);
+    }
+
+    .purchase::before {
+      color: var(--cyan);
+      content: "COMPRA CONFIRMADA";
+    }
+
+    .user-status {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+
+    .purchase-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: #0009;
+    }
+
+    .purchase-dialog {
+      display: grid;
+      grid-template-columns: minmax(220px, 42%) minmax(280px, 1fr);
+      width: min(900px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: 0 18px 50px #0008;
+    }
+
+    .purchase-poster {
+      min-height: 420px;
+      background: linear-gradient(145deg, #3c2050, #111725) center / cover no-repeat;
+    }
+
+    .purchase-details {
+      padding: 28px;
+    }
+
+    .purchase-details h2 {
+      margin-top: 0;
+      color: var(--pink);
+    }
+
+    .purchase-summary {
+      margin: 18px 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--muted);
+    }
+
+    .purchase-summary strong {
+      color: var(--yellow);
+      font-size: 22px;
+    }
+
+    @media (max-width: 900px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .concert-card {
+        grid-template-columns: minmax(180px, 35%) minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 650px) {
+      .purchase-dialog {
+        display: block;
+      }
+
+      .purchase-poster {
+        min-height: 220px;
+      }
+
+      .concert-card {
+        display: block;
+        padding: 0;
+      }
+
+      .card-image,
+      .card-placeholder {
+        height: 230px;
+        min-height: 0;
+        max-height: none;
+        border-radius: 14px 14px 0 0;
+      }
+
+      .concert-info {
+        padding: 28px 20px 20px;
+      }
+
+      .concert-actions {
+        padding: 14px 20px;
+      }
+
+      .concert-actions button {
+        margin-bottom: 6px;
+      }
+    }
   </style>
 </head>
 <body>
-  <header><div class="eyebrow">Puebla · VENTA LOCAL DE BOLETOS</div><h1>La música se vive <span>en vivo.</span></h1><p>Descubre conciertos, compara zonas y reserva tu lugar.</p></header>
+  <header>
+    <div class="eyebrow">Puebla · VENTA LOCAL DE BOLETOS</div>
+    <h1>La música se vive <span>en vivo.</span></h1>
+    <p>Descubre conciertos, compara zonas y reserva tu lugar.</p>
+  </header>
+
   <main>
-    <div class="toolbar"><button class="secondary" onclick="loadAll()">↻ Actualizar eventos</button><span class="user-status" id="user-status"></span><button class="secondary" onclick="logout()">Cerrar sesión</button><div class="links"><a href="/catalogo" target="_blank">Catálogo XSLT ↗</a><a href="/semantic/conciertos.rdf" target="_blank">Relaciones RDF ↗</a><a id="admin-register-link" href="/admin-register.html" hidden>Registrar Administrador</a></div></div>
-    <section class="panel" id="concert-admin-panel" hidden><h2 id="concert-form-title">Crear un concierto</h2><form class="form" id="concert-form">
-      <label>Nombre del concierto<input name="nombre" placeholder="Festival Aurora" required></label><label>Artista<input name="artista" placeholder="Artista o banda" required></label><label>Lugar<input name="lugar" placeholder="Foro Sol" required></label><label>Fecha<input name="fecha" type="date" required></label><label>Hora<input name="hora" type="time" required></label><label class="wide">Imagen del concierto<select name="imagen" id="image-select"><option value="">Sin imagen</option></select></label><label class="wide">Descripción<input name="descripcion" placeholder="Una noche inolvidable..."></label>
-      <label>Boleto general · precio<input name="generalPrecio" type="number" min="0" step=".01" placeholder="350" required></label><label>Disponibles<input name="generalDisponibles" type="number" min="0" placeholder="100" required></label><label>Boleto VIP · precio<input name="vipPrecio" type="number" min="0" step=".01" placeholder="850"></label><label>Disponibles VIP<input name="vipDisponibles" type="number" min="0" placeholder="30"></label><button id="concert-submit">Publicar concierto</button><button type="button" class="secondary" id="concert-cancel" hidden onclick="cancelConcertEdit()">Cancelar edición</button>
-    </form></section>
-    <section class="panel"><h2>Próximos conciertos</h2><div id="concerts" class="cards"></div></section>
-    <section class="panel"><h2>Comparar boletos</h2><div id="comparison" class="compare"><p class="empty">Agrega conciertos para comparar sus tipos de boleto.</p></div></section>
-    <section class="panel" id="purchase-panel" hidden><h2 id="purchase-form-title">Comprar boletos</h2><form class="form" id="purchase-form">
-      <label>Concierto<select name="conciertoId" id="concert-select" required><option value="">Selecciona un concierto</option></select></label><label>Tipo de boleto<select name="tipoBoleto" id="ticket-select" required><option value="">Selecciona una zona</option></select></label><label>Cantidad<input name="cantidad" type="number" min="1" value="1" required></label><label>Nombre completo<input name="nombreComprador" required></label><label>Correo electrónico<input name="correo" type="email" required></label><label>Teléfono<input name="telefono" required></label><button id="purchase-submit">Confirmar compra</button><button type="button" class="secondary" id="purchase-cancel" hidden onclick="cancelPurchaseEdit()">Cancelar edición</button>
-    </form></section>
-    <section class="panel"><h2>Mis compras</h2><div id="purchases" class="cards"><p class="empty">Todavía no tienes compras registradas.</p></div></section>
+    <div class="toolbar">
+      <button class="secondary" onclick="loadAll()">↻ Actualizar eventos</button>
+      <span class="user-status" id="user-status"></span>
+      <div class="links">
+        <a class="action-button" href="/catalogo" target="_blank">Catálogo XSLT</a>
+        <a class="action-button" href="/semantic/conciertos.rdf" target="_blank">Relaciones RDF</a>
+        <a class="action-button" id="admin-register-link" href="/admin-register.html" hidden>Registrar Administrador</a>
+      </div>
+      <button class="logout" onclick="logout()">Cerrar sesión</button>
+    </div>
+
+    <section class="panel" id="concert-admin-panel" hidden>
+      <h2 id="concert-form-title">Crear un concierto</h2>
+      <form class="form" id="concert-form">
+        <label>
+          Nombre del concierto
+          <input name="nombre" placeholder="Festival Aurora" required>
+        </label>
+        <label>
+          Artista
+          <input name="artista" placeholder="Artista o banda" required>
+        </label>
+        <label>
+          Lugar
+          <input name="lugar" placeholder="Foro Sol" required>
+        </label>
+        <label>
+          Fecha
+          <input name="fecha" type="date" required>
+        </label>
+        <label>
+          Hora
+          <input name="hora" type="time" required>
+        </label>
+        <label class="wide">
+          Imagen del concierto
+          <select name="imagen" id="image-select">
+            <option value="">Sin imagen</option>
+          </select>
+        </label>
+        <label class="wide">
+          Descripción
+          <input name="descripcion" placeholder="Una noche inolvidable...">
+        </label>
+        <label>
+          Boleto general · precio
+          <input name="generalPrecio" type="number" min="0" step=".01" placeholder="350" required>
+        </label>
+        <label>
+          Disponibles
+          <input name="generalDisponibles" type="number" min="0" placeholder="100" required>
+        </label>
+        <label>
+          Boleto VIP · precio
+          <input name="vipPrecio" type="number" min="0" step=".01" placeholder="850">
+        </label>
+        <label>
+          Disponibles VIP
+          <input name="vipDisponibles" type="number" min="0" placeholder="30">
+        </label>
+        <button id="concert-submit">Publicar concierto</button>
+        <button type="button" class="secondary" id="concert-cancel" hidden onclick="cancelConcertEdit()">
+          Cancelar edición
+        </button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Próximos conciertos</h2>
+      <div id="concerts" class="cards"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Comparar boletos</h2>
+      <div id="comparison" class="compare">
+        <p class="empty">Agrega conciertos para comparar sus tipos de boleto.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Compras</h2>
+      <div id="purchases" class="cards">
+        <p class="empty">Todavía no tienes compras registradas.</p>
+      </div>
+    </section>
+
     <p id="message"></p>
   </main>
+
+  <section class="purchase-modal" id="purchase-modal" hidden>
+    <div class="purchase-dialog">
+      <div class="purchase-poster" id="purchase-poster"></div>
+      <div class="purchase-details">
+        <h2 id="purchase-title">Comprar boleto</h2>
+        <p id="purchase-concert-info" class="empty"></p>
+        <form id="purchase-form">
+          <label>
+            Zona
+            <select name="tipoBoleto" id="ticket-select" required>
+              <option value="">Selecciona una zona</option>
+            </select>
+          </label>
+          <label>
+            Cantidad de boletos
+            <input name="cantidad" id="ticket-quantity" type="number" min="1" value="1" required>
+          </label>
+          <div class="purchase-summary">
+            Total de la compra:
+            <br>
+            <strong id="purchase-total">$0.00</strong>
+          </div>
+          <button id="purchase-submit">Confirmar compra</button>
+          <button type="button" class="secondary" onclick="closePurchaseModal()">Cancelar</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <script>
-    const $=id=>document.getElementById(id);let concerts=[];let purchases=[];let images=[];let editingConcertId=null;let editingPurchaseId=null;let currentUser=null;
-    async function api(url,options){const response=await fetch(url,options);const data=response.status===204?null:await response.json();if(!response.ok)throw new Error(data.error);return data}
-    function money(value){return `$${Number(value).toFixed(2)}`}
-    function render(){const isAdmin=currentUser?.rol==="admin";const cards=concerts.map(c=>`<article class="card concert-card">${c.imagen?`<img class="card-image" src="${c.imagen}" alt="Imagen de ${c.nombre}" onerror="this.hidden=true">`:'<div class="card-placeholder">SONORA</div>'}<div class="concert-info"><h3>${c.nombre}</h3><p><strong>${c.artista}</strong></p><p>📍 ${c.lugar}<br>📅 ${c.fecha} · ${c.hora}</p><p>${c.descripcion||"Música en vivo, una experiencia para recordar."}</p>${(Array.isArray(c.boletos)?c.boletos:[c.boletos]).map(t=>`<div class="ticket"><span>${t.tipo}<br><strong>${money(t.precio)}</strong> · ${t.disponibles} disponibles</span>${currentUser?`<button onclick="choose('${c.id}','${t.tipo}')">Comprar</button>`:""}</div>`).join("")}</div>${isAdmin?`<div class="concert-actions"><button class="secondary" onclick="editConcert('${c.id}')">Modificar evento</button> <button class="danger" onclick="removeConcert('${c.id}')">Cancelar evento</button></div>`:""}</article>`).join("");$("concerts").innerHTML=cards||'<p class="empty">Aún no hay conciertos publicados.</p>';$("concert-select").innerHTML='<option value="">Selecciona un concierto</option>'+concerts.map(c=>`<option value="${c.id}">${c.nombre} · ${c.artista}</option>`).join("");renderComparison();renderPurchases()}
-    function renderComparison(){if(!concerts.length){$("comparison").innerHTML='<p class="empty">Agrega conciertos para comparar sus tipos de boleto.</p>';return}const rows=concerts.flatMap(c=>(Array.isArray(c.boletos)?c.boletos:[c.boletos]).map(t=>`<tr><td>${c.nombre}</td><td>${c.artista}</td><td>${t.tipo}</td><td><strong>${money(t.precio)}</strong></td><td>${t.disponibles}</td></tr>`));$("comparison").innerHTML='<table><thead><tr><th>Concierto</th><th>Artista</th><th>Zona</th><th>Precio</th><th>Disponibles</th></tr></thead><tbody>'+rows.join("")+'</tbody></table>'}
-    function choose(id,type){$("concert-select").value=id;updateTickets();$("ticket-select").value=type;$("purchase-form").scrollIntoView({behavior:"smooth"})}
-    function updateTickets(){const c=concerts.find(x=>x.id===$("concert-select").value);$("ticket-select").innerHTML='<option value="">Selecciona una zona</option>'+(c?(Array.isArray(c.boletos)?c.boletos:[c.boletos]).map(t=>`<option value="${t.tipo}">${t.tipo} · ${money(t.precio)}</option>`).join(""):"")}
-    function renderPurchases(){const cards=purchases.map(p=>{const concert=concerts.find(c=>c.id===p.conciertoId);const ticket=concert&&(Array.isArray(concert.boletos)?concert.boletos:[concert.boletos]).find(t=>t.tipo===p.tipoBoleto);return `<article class="card purchase"><h3>${concert?concert.nombre:"Concierto no disponible"}</h3><p><strong>${concert?concert.artista:""}</strong> · ${concert?concert.fecha:""}</p><p>🎟️ Zona ${p.tipoBoleto} · ${p.cantidad} boleto(s)</p><p>Total: <strong>${ticket?money(Number(ticket.precio)*Number(p.cantidad)):"No disponible"}</strong></p><p>Comprador: ${p.nombreComprador}<br>${p.correo} · ${p.telefono}</p><small>ID de compra: ${p.id}</small><br><br><button class="secondary" onclick="editPurchase('${p.id}')">Modificar compra</button> <button class="danger" onclick="cancelPurchase('${p.id}')">Cancelar compra</button></article>`}).join("");$("purchases").innerHTML=cards||'<p class="empty">Todavía no tienes compras registradas.</p>'}
-    function renderImageOptions(selected=""){const select=$("image-select");select.innerHTML='<option value="">Sin imagen</option>'+images.map(image=>`<option value="${image.ruta}">${image.nombre}</option>`).join("");select.value=selected}
-    async function loadAll(){try{currentUser=await api("/api/auth/me");if(!currentUser){window.location.href="/login.html";return}concerts=await api("/api/conciertos");images=await api("/api/imagenes");purchases=await api("/api/compras");$("user-status").textContent=`Sesión: ${currentUser.username} (${currentUser.rol})`;$("concert-admin-panel").hidden=currentUser.rol!=="admin";$("purchase-panel").hidden=false;$("admin-register-link").hidden=currentUser.rol!=="admin";renderImageOptions();render()}catch(e){$("message").textContent=e.message}}
-    async function logout(){await api("/api/auth/logout",{method:"POST"});currentUser=null;loadAll()}
-    async function removeConcert(id){if(!confirm("¿Eliminar este concierto?"))return;try{await api("/api/conciertos/"+id,{method:"DELETE"});$("message").textContent="Concierto eliminado.";loadAll()}catch(e){$("message").textContent=e.message}}
-    function editConcert(id){const c=concerts.find(item=>item.id===id);const tickets=Array.isArray(c.boletos)?c.boletos:[c.boletos];const general=tickets.find(t=>t.tipo==="General")||tickets[0];const vip=tickets.find(t=>t.tipo==="VIP");editingConcertId=id;const form=$("concert-form");for(const field of ["nombre","artista","lugar","fecha","hora","descripcion"])form.elements[field].value=c[field]||"";renderImageOptions(c.imagen||"");form.elements.generalPrecio.value=general.precio;form.elements.generalDisponibles.value=general.disponibles;form.elements.vipPrecio.value=vip?vip.precio:"";form.elements.vipDisponibles.value=vip?vip.disponibles:"";$("concert-form-title").textContent="Modificar concierto";$("concert-submit").textContent="Guardar cambios";$("concert-cancel").hidden=false;form.scrollIntoView({behavior:"smooth"})}
-    function cancelConcertEdit(){editingConcertId=null;$("concert-form").reset();$("concert-form-title").textContent="Crear un concierto";$("concert-submit").textContent="Publicar concierto";$("concert-cancel").hidden=true}
-    function editPurchase(id){const p=purchases.find(item=>item.id===id);editingPurchaseId=id;$("concert-select").value=p.conciertoId;updateTickets();$("ticket-select").value=p.tipoBoleto;for(const field of ["cantidad","nombreComprador","correo","telefono"])$("purchase-form").elements[field].value=p[field];$("purchase-form-title").textContent="Modificar compra";$("purchase-submit").textContent="Guardar cambios";$("purchase-cancel").hidden=false;$("purchase-form").scrollIntoView({behavior:"smooth"})}
-    function cancelPurchaseEdit(){editingPurchaseId=null;$("purchase-form").reset();$("purchase-form-title").textContent="Comprar boletos";$("purchase-submit").textContent="Confirmar compra";$("purchase-cancel").hidden=true}
-    async function cancelPurchase(id){if(!confirm("¿Cancelar esta compra? Los boletos volverán a estar disponibles."))return;try{await api("/api/compras/"+id,{method:"DELETE"});$("message").textContent="Compra cancelada y boletos restaurados.";loadAll()}catch(e){$("message").textContent=e.message}}
-    $("concert-select").addEventListener("change",updateTickets);
-    $("concert-form").addEventListener("submit",async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));const boletos=[{tipo:"General",precio:f.generalPrecio,disponibles:f.generalDisponibles}];if(f.vipPrecio&&f.vipDisponibles)boletos.push({tipo:"VIP",precio:f.vipPrecio,disponibles:f.vipDisponibles});try{await api(editingConcertId?"/api/conciertos/"+editingConcertId:"/api/conciertos",{method:editingConcertId?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...f,boletos})});cancelConcertEdit();$("message").textContent="Concierto actualizado correctamente.";loadAll()}catch(err){$("message").textContent=err.message}});
-    $("purchase-form").addEventListener("submit",async e=>{e.preventDefault();const body=Object.fromEntries(new FormData(e.target));const wasEditing=Boolean(editingPurchaseId);try{await api(wasEditing?"/api/compras/"+editingPurchaseId:"/api/compras",{method:wasEditing?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});cancelPurchaseEdit();$("message").textContent=wasEditing?"Compra actualizada correctamente.":"Compra registrada. ¡Disfruta el concierto!";loadAll()}catch(err){$("message").textContent=err.message}});
+    const $ = (id) => document.getElementById(id);
+    let concerts = [];
+    let purchases = [];
+    let images = [];
+    let editingConcertId = null;
+    let editingPurchaseId = null;
+    let currentUser = null;
+    let selectedPurchaseConcert = null;
+
+    async function api(url, options) {
+      const response = await fetch(url, options);
+      const data = response.status === 204 ? null : await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+
+      return data;
+    }
+
+    function money(value) {
+      return `$${Number(value).toFixed(2)}`;
+    }
+
+    function render() {
+      const isAdmin = currentUser?.rol === "admin";
+      const cards = concerts.map((concert) => `
+        <article class="card concert-card">
+          ${concert.imagen
+            ? `<img class="card-image" src="${concert.imagen}" alt="Imagen de ${concert.nombre}" onerror="this.hidden=true">`
+            : '<div class="card-placeholder">SONORA</div>'}
+          <div class="concert-info">
+            <h3>${concert.nombre}</h3>
+            <p><strong>${concert.artista}</strong></p>
+            <p>
+              Lugar: ${concert.lugar}<br>
+              Fecha y hora: ${concert.fecha} · ${concert.hora}
+            </p>
+            <p>${concert.descripcion || "Música en vivo, una experiencia para recordar."}</p>
+            ${(Array.isArray(concert.boletos) ? concert.boletos : [concert.boletos])
+              .map((ticket) => `
+                <div class="ticket">
+                  <span>
+                    ${ticket.tipo}<br>
+                    <strong>${money(ticket.precio)}</strong> · ${ticket.disponibles} disponibles
+                  </span>
+                </div>
+              `).join("")}
+            ${currentUser
+              ? '<button onclick="openPurchaseModal(\'' + concert.id + '\')">Comprar boleto</button>'
+              : ""}
+          </div>
+          ${isAdmin
+            ? `<div class="concert-actions">
+                <button class="secondary" onclick="editConcert('${concert.id}')">Modificar evento</button>
+                <button class="danger" onclick="removeConcert('${concert.id}')">Cancelar evento</button>
+              </div>`
+            : ""}
+        </article>
+      `).join("");
+
+      $("concerts").innerHTML = cards || '<p class="empty">Aún no hay conciertos publicados.</p>';
+      renderComparison();
+      renderPurchases();
+    }
+
+    function renderComparison() {
+      if (!concerts.length) {
+        $("comparison").innerHTML = '<p class="empty">Agrega conciertos para comparar sus tipos de boleto.</p>';
+        return;
+      }
+
+      const rows = concerts.flatMap((concert) => (
+        (Array.isArray(concert.boletos) ? concert.boletos : [concert.boletos])
+          .map((ticket) => `
+            <tr>
+              <td>${concert.nombre}</td>
+              <td>${concert.artista}</td>
+              <td>${ticket.tipo}</td>
+              <td><strong>${money(ticket.precio)}</strong></td>
+              <td>${ticket.disponibles}</td>
+            </tr>
+          `)
+      ));
+
+      $("comparison").innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Concierto</th>
+              <th>Artista</th>
+              <th>Zona</th>
+              <th>Precio</th>
+              <th>Disponibles</th>
+            </tr>
+          </thead>
+          <tbody>${rows.join("")}</tbody>
+        </table>
+      `;
+    }
+
+    function openPurchaseModal(id) {
+      selectedPurchaseConcert = concerts.find((concert) => concert.id === id);
+      const tickets = Array.isArray(selectedPurchaseConcert.boletos)
+        ? selectedPurchaseConcert.boletos
+        : [selectedPurchaseConcert.boletos];
+      const poster = $("purchase-poster");
+
+      $("purchase-modal").hidden = false;
+      $("purchase-title").textContent = "Comprar boleto";
+      $("purchase-concert-info").textContent =
+        `${selectedPurchaseConcert.nombre} · ${selectedPurchaseConcert.artista}`;
+      $("ticket-select").innerHTML = `
+        <option value="">Selecciona una zona</option>
+        ${tickets.map((ticket) => `
+          <option value="${ticket.tipo}">${ticket.tipo} · ${money(ticket.precio)}</option>
+        `).join("")}
+      `;
+      poster.style.backgroundImage = selectedPurchaseConcert.imagen
+        ? `url("${selectedPurchaseConcert.imagen}")`
+        : "";
+      $("ticket-quantity").value = 1;
+      updatePurchaseTotal();
+    }
+
+    function closePurchaseModal() {
+      $("purchase-modal").hidden = true;
+      selectedPurchaseConcert = null;
+      $("purchase-form").reset();
+    }
+
+    function updatePurchaseTotal() {
+      const tickets = selectedPurchaseConcert
+        ? (Array.isArray(selectedPurchaseConcert.boletos)
+          ? selectedPurchaseConcert.boletos
+          : [selectedPurchaseConcert.boletos])
+        : [];
+      const ticket = tickets.find((item) => item.tipo === $("ticket-select").value);
+      $("purchase-total").textContent = ticket
+        ? money(Number(ticket.precio) * Number($("ticket-quantity").value || 0))
+        : "$0.00";
+    }
+
+    function renderPurchases() {
+      const cards = purchases.map((purchase) => {
+        const concert = concerts.find((item) => item.id === purchase.conciertoId);
+        const tickets = concert
+          ? (Array.isArray(concert.boletos) ? concert.boletos : [concert.boletos])
+          : [];
+        const ticket = tickets.find((item) => item.tipo === purchase.tipoBoleto);
+
+        return `
+          <article class="card purchase">
+            <h3>${concert ? concert.nombre : "Concierto no disponible"}</h3>
+            <p><strong>${concert ? concert.artista : ""}</strong> · ${concert ? concert.fecha : ""}</p>
+            <p>Zona: ${purchase.tipoBoleto} · ${purchase.cantidad} boleto(s)</p>
+            <p>
+              Total:
+              <strong>${ticket
+                ? money(Number(ticket.precio) * Number(purchase.cantidad))
+                : "No disponible"}</strong>
+            </p>
+            <p>
+              Comprador: ${purchase.nombreComprador}<br>
+              ${purchase.correo} · ${purchase.telefono}
+            </p>
+            <small>ID de compra: ${purchase.id}</small><br><br>
+            <button class="secondary" onclick="editPurchase('${purchase.id}')">Modificar compra</button>
+            <button class="danger" onclick="cancelPurchase('${purchase.id}')">Cancelar compra</button>
+          </article>
+        `;
+      }).join("");
+
+      $("purchases").innerHTML = cards || '<p class="empty">Todavía no tienes compras registradas.</p>';
+    }
+
+    function renderImageOptions(selected = "") {
+      const select = $("image-select");
+      select.innerHTML = `
+        <option value="">Sin imagen</option>
+        ${images.map((image) => `<option value="${image.ruta}">${image.nombre}</option>`).join("")}
+      `;
+      select.value = selected;
+    }
+
+    async function loadAll() {
+      try {
+        currentUser = await api("/api/auth/me");
+
+        if (!currentUser) {
+          window.location.href = "/login.html";
+          return;
+        }
+
+        concerts = await api("/api/conciertos");
+        images = await api("/api/imagenes");
+        purchases = await api("/api/compras");
+        $("user-status").textContent = `Sesión: ${currentUser.username} (${currentUser.rol})`;
+        $("concert-admin-panel").hidden = currentUser.rol !== "admin";
+        $("admin-register-link").hidden = currentUser.rol !== "admin";
+        renderImageOptions();
+        render();
+      } catch (error) {
+        $("message").textContent = error.message;
+      }
+    }
+
+    async function logout() {
+      await api("/api/auth/logout", { method: "POST" });
+      currentUser = null;
+      loadAll();
+    }
+
+    async function removeConcert(id) {
+      if (!confirm("¿Eliminar este concierto?")) {
+        return;
+      }
+
+      try {
+        await api(`/api/conciertos/${id}`, { method: "DELETE" });
+        $("message").textContent = "Concierto eliminado.";
+        loadAll();
+      } catch (error) {
+        $("message").textContent = error.message;
+      }
+    }
+
+    function editConcert(id) {
+      const concert = concerts.find((item) => item.id === id);
+      const tickets = Array.isArray(concert.boletos) ? concert.boletos : [concert.boletos];
+      const general = tickets.find((ticket) => ticket.tipo === "General") || tickets[0];
+      const vip = tickets.find((ticket) => ticket.tipo === "VIP");
+      const form = $("concert-form");
+
+      editingConcertId = id;
+
+      for (const field of ["nombre", "artista", "lugar", "fecha", "hora", "descripcion"]) {
+        form.elements[field].value = concert[field] || "";
+      }
+
+      renderImageOptions(concert.imagen || "");
+      form.elements.generalPrecio.value = general.precio;
+      form.elements.generalDisponibles.value = general.disponibles;
+      form.elements.vipPrecio.value = vip ? vip.precio : "";
+      form.elements.vipDisponibles.value = vip ? vip.disponibles : "";
+      $("concert-form-title").textContent = "Modificar concierto";
+      $("concert-submit").textContent = "Guardar cambios";
+      $("concert-cancel").hidden = false;
+      form.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function cancelConcertEdit() {
+      editingConcertId = null;
+      $("concert-form").reset();
+      $("concert-form-title").textContent = "Crear un concierto";
+      $("concert-submit").textContent = "Publicar concierto";
+      $("concert-cancel").hidden = true;
+    }
+
+    function editPurchase(id) {
+      const purchase = purchases.find((item) => item.id === id);
+
+      editingPurchaseId = id;
+      openPurchaseModal(purchase.conciertoId);
+      $("ticket-select").value = purchase.tipoBoleto;
+      $("ticket-quantity").value = purchase.cantidad;
+      updatePurchaseTotal();
+      $("purchase-title").textContent = "Modificar compra";
+      $("purchase-submit").textContent = "Guardar cambios";
+    }
+
+    function cancelPurchaseEdit() {
+      editingPurchaseId = null;
+      closePurchaseModal();
+      $("purchase-title").textContent = "Comprar boleto";
+      $("purchase-submit").textContent = "Confirmar compra";
+    }
+
+    async function cancelPurchase(id) {
+      if (!confirm("¿Cancelar esta compra? Los boletos volverán a estar disponibles.")) {
+        return;
+      }
+
+      try {
+        await api(`/api/compras/${id}`, { method: "DELETE" });
+        $("message").textContent = "Compra cancelada y boletos restaurados.";
+        loadAll();
+      } catch (error) {
+        $("message").textContent = error.message;
+      }
+    }
+
+    $("ticket-select").addEventListener("change", updatePurchaseTotal);
+    $("ticket-quantity").addEventListener("input", updatePurchaseTotal);
+
+    $("concert-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = Object.fromEntries(new FormData(event.target));
+      const tickets = [
+        {
+          tipo: "General",
+          precio: formData.generalPrecio,
+          disponibles: formData.generalDisponibles
+        }
+      ];
+
+      if (formData.vipPrecio && formData.vipDisponibles) {
+        tickets.push({
+          tipo: "VIP",
+          precio: formData.vipPrecio,
+          disponibles: formData.vipDisponibles
+        });
+      }
+
+      try {
+        await api(
+          editingConcertId ? `/api/conciertos/${editingConcertId}` : "/api/conciertos",
+          {
+            method: editingConcertId ? "PUT" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...formData, boletos: tickets })
+          }
+        );
+        cancelConcertEdit();
+        $("message").textContent = "Concierto actualizado correctamente.";
+        loadAll();
+      } catch (error) {
+        $("message").textContent = error.message;
+      }
+    });
+
+    $("purchase-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const body = {
+        conciertoId: selectedPurchaseConcert.id,
+        ...Object.fromEntries(new FormData(event.target))
+      };
+      const wasEditing = Boolean(editingPurchaseId);
+
+      try {
+        await api(
+          wasEditing ? `/api/compras/${editingPurchaseId}` : "/api/compras",
+          {
+            method: wasEditing ? "PUT" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+          }
+        );
+        cancelPurchaseEdit();
+        $("message").textContent = wasEditing
+          ? "Compra actualizada correctamente."
+          : "Compra registrada. ¡Disfruta el concierto!";
+        loadAll();
+      } catch (error) {
+        $("message").textContent = error.message;
+      }
+    });
+
     loadAll();
   </script>
 </body>
