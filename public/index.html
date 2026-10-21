@@ -169,18 +169,44 @@
     }
 
     .password-field {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      position: relative;
+      display: block;
     }
 
     .password-field input {
-      flex: 1;
+      width: 100%;
+      padding-right: 46px;
     }
 
     .password-toggle {
-      padding: 8px 10px;
-      white-space: nowrap;
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      display: grid;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      place-items: center;
+      transform: translateY(-50%);
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .password-toggle:hover,
+    .password-toggle:focus-visible {
+      background: transparent;
+      color: var(--yellow);
+    }
+
+    .password-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
     }
 
     .toast {
@@ -208,7 +234,7 @@
 
     .form {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       column-gap: 12px;
       row-gap: 20px;
     }
@@ -240,6 +266,20 @@
 
     .wide {
       grid-column: 1 / -1;
+    }
+
+    .form-actions {
+      display: flex;
+      grid-column: 1 / -1;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    #user-form > label:last-of-type {
+      grid-column: 1 / -1;
+      width: min(100%, calc(50% - 6px));
+      justify-self: center;
     }
 
     .cards {
@@ -463,9 +503,11 @@
       content: "COMPRA CONFIRMADA";
     }
 
-    .user-status {
+    .welcome-message {
+      margin: 12px 0 0;
       color: var(--cyan);
       font-weight: 700;
+      font-size: 30px;
     }
 
     .purchase-modal {
@@ -560,6 +602,14 @@
     }
 
     @media (max-width: 650px) {
+      .form {
+        grid-template-columns: 1fr;
+      }
+
+      #user-form > label:last-of-type {
+        width: 100%;
+      }
+
       .purchase-dialog {
         display: block;
       }
@@ -601,16 +651,16 @@
     <div class="eyebrow">Puebla · VENTA LOCAL DE BOLETOS</div>
     <h1>La música se vive <span>en vivo.</span></h1>
     <p>Descubre conciertos, compara zonas y reserva tu lugar.</p>
+    <p class="welcome-message" id="welcome-message"></p>
   </header>
 
   <main>
     <div class="toolbar">
       <button class="secondary" onclick="loadAll()">↻ Actualizar eventos</button>
-      <span class="user-status" id="user-status"></span>
       <div class="links">
         <button class="action-button" id="create-event-button" hidden onclick="openEventModal()">Crear evento</button>
-        <a class="action-button" href="/catalogo">Catálogo XSLT</a>
-        <a class="action-button" href="/semantic/conciertos.rdf" target="_blank">Relaciones RDF</a>
+        <a class="action-button" id="catalog-link" href="/catalogo" hidden>Catálogo XSLT</a>
+        <a class="action-button" id="rdf-link" href="/semantic/conciertos.rdf" target="_blank" hidden>Relaciones RDF</a>
         <a class="action-button" href="/profile.html">Editar perfil</a>
       </div>
     </div>
@@ -625,35 +675,46 @@
       <div id="upcoming-concerts" class="cards"></div>
     </section>
 
+    <section class="panel" id="finished-panel" hidden>
+      <h2>Terminados</h2>
+      <div id="finished-concerts" class="cards"></div>
+    </section>
+
     <section class="purchase-modal" id="user-modal" hidden>
       <div class="event-dialog">
         <h2>Editar usuario</h2>
         <form class="form" id="user-form">
-          <label>Usuario<input name="username" required minlength="3"></label>
+          <label>Usuario<input name="username" required minlength="3" maxlength="30" pattern="[A-Za-z0-9_.-]{3,30}" title="Usa de 3 a 30 caracteres: letras, números, punto, guion o guion bajo."></label>
           <label>Contraseña
             <span class="password-field">
-              <input name="password" id="user-password" type="password" minlength="4">
-              <button type="button" class="secondary password-toggle" data-password-target="user-password">Mostrar</button>
+              <input name="password" id="user-password" type="password" minlength="4" maxlength="128">
+              <button type="button" class="secondary password-toggle" data-password-target="user-password" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+              </button>
             </span>
           </label>
           <label>Confirmar contraseña
             <span class="password-field">
-              <input name="confirmPassword" id="user-confirm-password" type="password" minlength="4">
-              <button type="button" class="secondary password-toggle" data-password-target="user-confirm-password">Mostrar</button>
+              <input name="confirmPassword" id="user-confirm-password" type="password" minlength="4" maxlength="128">
+              <button type="button" class="secondary password-toggle" data-password-target="user-confirm-password" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+              </button>
             </span>
           </label>
-          <label>Nombre<input name="nombre" required></label>
-          <label>Apellido paterno<input name="apellidoPaterno" required></label>
-          <label>Apellido materno<input name="apellidoMaterno" required></label>
+          <label>Nombre<input name="nombre" required minlength="2" maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:[ '-][A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*" title="Solo se permiten letras, espacios, apóstrofes o guiones."></label>
+          <label>Apellido paterno<input name="apellidoPaterno" required minlength="2" maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:[ '-][A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*" title="Solo se permiten letras, espacios, apóstrofes o guiones."></label>
+          <label>Apellido materno<input name="apellidoMaterno" required minlength="2" maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:[ '-][A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*" title="Solo se permiten letras, espacios, apóstrofes o guiones."></label>
           <label>Día de nacimiento<input name="diaNacimiento" type="number" min="1" max="31" required></label>
           <label>Mes de nacimiento<input name="mesNacimiento" type="number" min="1" max="12" required></label>
-          <label>Año de nacimiento<input name="anioNacimiento" type="number" min="1900" required></label>
+          <label>Año de nacimiento<input name="anioNacimiento" type="number" min="1900" max="2008" required></label>
           <label>Género<select name="genero" required><option value="">Selecciona una opción</option><option>Hombre</option><option>Mujer</option><option>Personalizado</option><option>Prefiero no decirlo</option></select></label>
-          <label>Correo electrónico<input name="correo" type="email" required></label>
-          <label>Número de celular<input name="telefono" required></label>
+          <label>Correo electrónico<input name="correo" type="email" maxlength="120" required></label>
+          <label>Número de celular<input name="telefono" inputmode="numeric" minlength="10" maxlength="10" pattern="[0-9]{10}" required title="Debe contener exactamente 10 dígitos."></label>
           <label>Rol<select name="rol" required><option value="usuario">Usuario</option><option value="admin">Administrador</option></select></label>
-          <button>Guardar cambios</button>
-          <button type="button" class="secondary" onclick="closeUserModal()">Cancelar</button>
+          <div class="form-actions">
+            <button>Guardar cambios</button>
+            <button type="button" class="secondary" onclick="closeUserModal()">Cancelar</button>
+          </div>
         </form>
       </div>
     </section>
@@ -672,9 +733,9 @@
       <div class="event-dialog">
         <h2 id="event-form-title">Crear evento</h2>
         <form class="form" id="concert-form">
-          <label>Nombre del evento<input name="nombre" required></label>
-          <label>Artista<input name="artista" required></label>
-          <label>Lugar<input name="lugar" required></label>
+          <label>Nombre del evento<input name="nombre" required minlength="2" maxlength="120"></label>
+          <label>Artista<input name="artista" required minlength="2" maxlength="120"></label>
+          <label>Lugar<input name="lugar" required minlength="2" maxlength="120"></label>
           <label>Fecha<input name="fecha" type="date" required></label>
           <label>
             Hora
@@ -684,15 +745,17 @@
             <input name="proximamente" id="upcoming-event" type="checkbox">
             Próximamente
           </label>
-          <label class="wide">Descripción<textarea name="descripcion" rows="3"></textarea></label>
+          <label class="wide">Descripción<textarea name="descripcion" rows="3" maxlength="1000"></textarea></label>
           <label class="wide">Imagen del concierto<input name="imagenFile" type="file" accept="image/jpeg,image/png,image/gif,image/webp"></label>
           <div class="wide">
             <strong>Boletos</strong>
             <div class="ticket-list" id="ticket-list"></div>
             <button type="button" class="secondary" onclick="addTicketRow()">+ Añadir boleto</button>
           </div>
-          <button id="concert-submit">Publicar evento</button>
-          <button type="button" class="secondary" onclick="closeEventModal()">Cancelar</button>
+          <div class="form-actions">
+            <button id="concert-submit">Publicar evento</button>
+            <button type="button" class="secondary" onclick="closeEventModal()">Cancelar</button>
+          </div>
         </form>
       </div>
     </section>
@@ -778,8 +841,10 @@
             <br>
             <strong id="purchase-total">$0.00</strong>
           </div>
-          <button id="purchase-submit">Confirmar compra</button>
-          <button type="button" class="secondary" onclick="closePurchaseModal()">Cancelar</button>
+          <div class="form-actions">
+            <button id="purchase-submit">Confirmar compra</button>
+            <button type="button" class="secondary" onclick="closePurchaseModal()">Cancelar</button>
+          </div>
         </form>
       </div>
     </div>
@@ -827,12 +892,19 @@
         const input = $(button.dataset.passwordTarget);
         const visible = input.type === "text";
         input.type = visible ? "password" : "text";
-        button.textContent = visible ? "Mostrar" : "Ocultar";
+        button.setAttribute("aria-label", visible ? "Mostrar contraseña" : "Ocultar contraseña");
+        button.title = visible ? "Mostrar contraseña" : "Ocultar contraseña";
       });
     });
 
     function money(value) {
       return `$${Number(value).toFixed(2)}`;
+    }
+
+    function eventHasPassed(concert) {
+      if (concert.proximamente) return false;
+      const eventDate = new Date(`${concert.fecha}T${concert.hora || "00:00:00"}`);
+      return !Number.isNaN(eventDate.getTime()) && eventDate <= new Date();
     }
 
     function renderConcertCards(items, emptyMessage) {
@@ -851,7 +923,7 @@
                 : `Lugar: ${concert.lugar}<br>Fecha y hora: ${concert.fecha} · ${concert.hora}`}
             </p>
             <p>${concert.descripcion || "Música en vivo, una experiencia para recordar."}</p>
-            ${currentUser && !concert.proximamente
+            ${currentUser?.rol === "usuario" && !concert.proximamente && !eventHasPassed(concert)
               ? '<button onclick="openPurchaseModal(\'' + concert.id + '\')">Comprar boleto</button>'
               : ""}
           </div>
@@ -868,10 +940,15 @@
     }
 
     function render() {
-      const currentConcerts = concerts.filter((concert) => !concert.proximamente);
+      const currentConcerts = concerts.filter((concert) => !concert.proximamente && !eventHasPassed(concert));
       const upcomingConcerts = concerts.filter((concert) => concert.proximamente);
+      const finishedConcerts = concerts.filter((concert) => !concert.proximamente && eventHasPassed(concert));
       $("concerts").innerHTML = renderConcertCards(currentConcerts, "Aún no hay eventos actuales.");
       $("upcoming-concerts").innerHTML = renderConcertCards(upcomingConcerts, "Aún no hay eventos próximos.");
+      $("finished-panel").hidden = currentUser?.rol !== "admin";
+      if (currentUser?.rol === "admin") {
+        $("finished-concerts").innerHTML = renderConcertCards(finishedConcerts, "Aún no hay eventos terminados.");
+      }
       renderReportOptions();
       renderPurchaseFilter();
       renderUsers();
@@ -987,11 +1064,12 @@
     function renderReportOptions() {
       const select = $("report-event-select");
       const selected = select.value;
+      const reportableConcerts = concerts.filter((concert) => !concert.proximamente);
       select.innerHTML = `
         <option value="">Selecciona un evento</option>
-        ${concerts.map((concert) => `<option value="${concert.id}">${concert.nombre}</option>`).join("")}
+        ${reportableConcerts.map((concert) => `<option value="${concert.id}">${concert.nombre}</option>`).join("")}
       `;
-      select.value = concerts.some((concert) => concert.id === selected) ? selected : "";
+      select.value = reportableConcerts.some((concert) => concert.id === selected) ? selected : "";
       if (!select.value) {
         $("comparison").innerHTML = '<p class="empty">Selecciona un evento para consultar sus estadísticas.</p>';
       }
@@ -1045,6 +1123,18 @@
 
     function openPurchaseModal(id) {
       selectedPurchaseConcert = concerts.find((concert) => concert.id === id);
+      if (!selectedPurchaseConcert || selectedPurchaseConcert.proximamente) {
+        showToast("Este evento todavía no está disponible para compras.");
+        return;
+      }
+      if (currentUser?.rol !== "usuario") {
+        showToast("Los administradores no pueden comprar boletos.");
+        return;
+      }
+      if (eventHasPassed(selectedPurchaseConcert)) {
+        showToast("Este evento ya terminó y no admite compras.");
+        return;
+      }
       const tickets = Array.isArray(selectedPurchaseConcert.boletos)
         ? selectedPurchaseConcert.boletos
         : [selectedPurchaseConcert.boletos];
@@ -1101,7 +1191,7 @@
           <article class="card purchase">
             <h3>${concert ? concert.nombre : "Concierto no disponible"}</h3>
             <p><strong>${concert ? concert.artista : ""}</strong> · ${concert ? concert.fecha : ""}</p>
-            <p>Zona: ${purchase.tipoBoleto} · ${purchase.cantidad} boleto(s)</p>
+            <p>Zona:  ${purchase.tipoBoleto} · ${purchase.cantidad} boleto(s)</p>
             <p>
               Total:
               <strong>${ticket
@@ -1134,8 +1224,11 @@
         concerts = await api("/api/conciertos");
         images = await api("/api/imagenes");
         purchases = await api("/api/compras");
-        $("user-status").textContent = `Sesión: ${currentUser.username} (${currentUser.rol})`;
+        const displayName = currentUser.nombre || currentUser.username;
+        $("welcome-message").textContent = `¡Bienvenido de nuevo, ${displayName} - @${currentUser.username}!`;
         $("create-event-button").hidden = currentUser.rol !== "admin";
+        $("catalog-link").hidden = currentUser.rol !== "admin";
+        $("rdf-link").hidden = currentUser.rol !== "admin";
         $("admin-register-link").hidden = currentUser.rol !== "admin";
         $("statistics-panel").hidden = currentUser.rol !== "admin";
         $("users-panel").hidden = currentUser.rol !== "admin";
@@ -1198,9 +1291,9 @@
       row.className = "ticket-row";
       row.innerHTML = `
         <button type="button" class="danger" aria-label="Eliminar boleto" onclick="this.parentElement.remove()">-</button>
-        <label>Tipo de boleto<input name="ticketTipo" value="${ticket.tipo || ""}" required></label>
-        <label>Precio<input name="ticketPrecio" type="number" min="0" step=".01" value="${ticket.precio || ""}" required></label>
-        <label>Disponibles<input name="ticketDisponibles" type="number" min="0" value="${ticket.disponibles || ""}" required></label>
+        <label>Tipo de boleto<input name="ticketTipo" maxlength="50" value="${ticket.tipo || ""}" required></label>
+        <label>Precio<input name="ticketPrecio" type="number" min="0" max="10000000" step=".01" value="${ticket.precio || ""}" required></label>
+        <label>Disponibles<input name="ticketDisponibles" type="number" min="0" max="1000000" value="${ticket.disponibles || ""}" required></label>
       `;
       $("ticket-list").append(row);
     }
@@ -1274,11 +1367,17 @@
 
     $("user-form").addEventListener("submit", async (event) => {
       event.preventDefault();
+      if (!event.target.reportValidity()) return;
+      const values = Object.fromEntries(new FormData(event.target));
+      if (values.password !== values.confirmPassword) {
+        showToast("Las contraseñas no coinciden.");
+        return;
+      }
       try {
         await api(`/api/admin/usuarios/${editingUserId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(Object.fromEntries(new FormData(event.target)))
+          body: JSON.stringify(values)
         });
         closeUserModal();
         showToast("Usuario actualizado correctamente.");
@@ -1290,6 +1389,7 @@
 
     $("concert-form").addEventListener("submit", async (event) => {
       event.preventDefault();
+      if (!event.target.reportValidity()) return;
       try {
         const wasEditing = Boolean(editingConcertId);
         const formData = Object.fromEntries(new FormData(event.target));
@@ -1343,6 +1443,7 @@
 
     $("purchase-form").addEventListener("submit", async (event) => {
       event.preventDefault();
+      if (!event.target.reportValidity()) return;
       const body = {
         conciertoId: selectedPurchaseConcert.id,
         ...Object.fromEntries(new FormData(event.target))

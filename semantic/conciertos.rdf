@@ -1,18 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
   xmlns:s="http://sonora.local/conciertos#">
-  <rdf:Description rdf:about="http://sonora.local/conciertos">
-    <s:tipo>Venta local de boletos para conciertos</s:tipo>
-    <s:contiene>conciertos, boletos y compras</s:contiene>
+  <rdf:Description rdf:about="http://sonora.local/conciertos#BaseDeDatos">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label>Base de datos de Sonora</rdfs:label>
+    <s:contiene rdf:resource="http://sonora.local/conciertos#Conciertos"/>
+    <s:contiene rdf:resource="http://sonora.local/conciertos#Compras"/>
+    <s:contiene rdf:resource="http://sonora.local/conciertos#Usuarios"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://sonora.local/concierto">
-    <s:tieneArtista>artista</s:tieneArtista>
-    <s:seRealizaEn>lugar</s:seRealizaEn>
-    <s:ofrece>boleto</s:ofrece>
+
+  <rdf:Description rdf:about="http://sonora.local/conciertos#Conciertos">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label>Listado de conciertos</rdfs:label>
+    <s:contiene rdf:resource="http://sonora.local/conciertos#Concierto"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://sonora.local/compra">
-    <s:correspondeA>concierto</s:correspondeA>
-    <s:incluye>boleto</s:incluye>
-    <s:realizadaPor>comprador</s:realizadaPor>
+  <rdf:Description rdf:about="http://sonora.local/conciertos#Concierto">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label>Concierto</rdfs:label>
+    <s:propiedad>id</s:propiedad>
+    <s:propiedad>nombre</s:propiedad>
+    <s:propiedad>artista</s:propiedad>
+    <s:propiedad>lugar</s:propiedad>
+    <s:propiedad>fecha</s:propiedad>
+    <s:propiedad>hora</s:propiedad>
+    <s:propiedad>descripcion</s:propiedad>
+    <s:propiedad>imagen</s:propiedad>
+    <s:propiedad>proximamente</s:propiedad>
+    <s:contiene rdf:resource="http://sonora.local/conciertos#Boletos"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://sonora.local/conciertos#Boletos">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label>Listado de boletos</rdfs:label>
+    <s:contiene rdf:resource="http://sonora.local/conciertos#Boleto"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://sonora.local/conciertos#Boleto">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label>Boleto</rdfs:label>
+    <s:propiedad>tipo</s:propiedad>
+    <s:propiedad>precio</s:propiedad>
+    <s:propiedad>disponibles</s:propiedad>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://sonora.local/conciertos#Compras">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label>Listado de compras</rdfs:label>
+    <s:contiene rdf:resource="http://sonora.local/conciertos#Compra"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://sonora.local/conciertos#Compra">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label>Compra</rdfs:label>
+    <s:propiedad>id</s:propiedad>
+    <s:propiedad>conciertoId</s:propiedad>
+    <s:propiedad>tipoBoleto</s:propiedad>
+    <s:propiedad>cantidad</s:propiedad>
+    <s:propiedad>fechaCompra</s:propiedad>
+    <s:propiedad>usuarioId</s:propiedad>
+    <s:relacion>conciertoId relaciona con Concierto</s:relacion>
+    <s:relacion>usuarioId relaciona con Usuario</s:relacion>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://sonora.local/conciertos#Usuarios">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label>Listado de usuarios</rdfs:label>
+    <s:contiene rdf:resource="http://sonora.local/conciertos#Usuario"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://sonora.local/conciertos#Usuario">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:label>Usuario</rdfs:label>
+    <s:propiedad>id</s:propiedad>
+    <s:propiedad>username</s:propiedad>
+    <s:propiedad>password</s:propiedad>
+    <s:propiedad>nombre</s:propiedad>
+    <s:propiedad>apellidoPaterno</s:propiedad>
+    <s:propiedad>apellidoMaterno</s:propiedad>
+    <s:propiedad>diaNacimiento</s:propiedad>
+    <s:propiedad>mesNacimiento</s:propiedad>
+    <s:propiedad>anioNacimiento</s:propiedad>
+    <s:propiedad>genero</s:propiedad>
+    <s:propiedad>correo</s:propiedad>
+    <s:propiedad>telefono</s:propiedad>
+    <s:propiedad>rol</s:propiedad>
   </rdf:Description>
 </rdf:RDF>

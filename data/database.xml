@@ -4,14 +4,15 @@
   <conciertos>
     <concierto id="878e6df8-b27b-4beb-8390-0bc056b32087">
       <nombre>YEM</nombre>
-      <artista>morat</artista>
+      <artista>Morat</artista>
       <lugar>GNP</lugar>
-      <fecha>2026-12-11</fecha>
-      <hora>22:00:00</hora>
+      <proximamente>true</proximamente>
       <descripcion>UNA NOCHE DE BAILE Y RECUERDOS INOLVIDABLE</descripcion>
       <ticketTipo>Platino</ticketTipo>
       <ticketPrecio>3500</ticketPrecio>
       <ticketDisponibles>50</ticketDisponibles>
+      <fecha>2026-12-11</fecha>
+      <hora/>
       <boletos>
         <boleto>
           <tipo>General</tipo>
@@ -30,18 +31,18 @@
         </boleto>
       </boletos>
       <imagen>/images/5590925d-95b2-47e1-9b38-b1814216c049.jpg</imagen>
-      <proximamente>false</proximamente>
     </concierto>
     <concierto id="7e89e73e-e995-45be-be55-226001dd3288">
       <nombre>CAPUAVENTURES</nombre>
       <artista>Nieto de Capulina</artista>
       <lugar>CU</lugar>
-      <fecha>2026-12-12</fecha>
-      <hora>16:53</hora>
+      <proximamente>true</proximamente>
       <descripcion>Pasatela bien chicle bomba con el nietototote de capulinitititota</descripcion>
       <ticketTipo>VIP</ticketTipo>
       <ticketPrecio>6700</ticketPrecio>
       <ticketDisponibles>67</ticketDisponibles>
+      <fecha>2026-12-12</fecha>
+      <hora/>
       <boletos>
         <boleto>
           <tipo>General</tipo>
@@ -55,7 +56,6 @@
         </boleto>
       </boletos>
       <imagen>/images/capulina.jpg</imagen>
-      <proximamente>false</proximamente>
     </concierto>
     <concierto id="d937bc11-6db2-4377-8363-759eed44ded3">
       <nombre>Los Guapos</nombre>
@@ -82,6 +82,291 @@
       <imagen>/images/mateo.jpg</imagen>
       <proximamente>false</proximamente>
     </concierto>
+    <concierto id="a3f47c21-8d65-4b92-9e10-1f6a2c8b7340">
+      <nombre>Ya Es Mañana Tour</nombre>
+      <artista>Morat</artista>
+      <lugar>Palacio de los Deportes</lugar>
+      <fecha>2026-11-08</fecha>
+      <hora>20:00:00</hora>
+      <descripcion>Disfruta una noche llena de pop latino, grandes éxitos y nuevas canciones de Morat.</descripcion>
+      <ticketTipo>Platino</ticketTipo>
+      <ticketPrecio>2800</ticketPrecio>
+      <ticketDisponibles>50</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>900</precio>
+          <disponibles>200</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>1800</precio>
+          <disponibles>100</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>Platino</tipo>
+          <precio>2800</precio>
+          <disponibles>50</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/5da8548d-306b-4e00-865d-00d77119c066.jpg</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
+    <concierto id="b4e58d32-9c76-4a13-8f20-2a7b3d9c8451">
+      <nombre>Viajando por el Mundo</nombre>
+      <artista>Karol G</artista>
+      <lugar>Estadio GNP Seguros</lugar>
+      <fecha>2026-11-13</fecha>
+      <hora>21:00:00</hora>
+      <descripcion>Una presentación de música urbana y reguetón con los grandes éxitos de Karol G.</descripcion>
+      <ticketTipo>Platino</ticketTipo>
+      <ticketPrecio>3500</ticketPrecio>
+      <ticketDisponibles>120</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>1200</precio>
+          <disponibles>300</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>2400</precio>
+          <disponibles>150</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>Platino</tipo>
+          <precio>3500</precio>
+          <disponibles>120</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/e6cbc4db-839d-466d-9033-350996fa2881.jpg</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
+    <concierto id="c5f69e43-ad87-4b24-9a31-3b8c4e0d9562">
+      <nombre>Lila Downs en Concierto</nombre>
+      <artista>Lila Downs</artista>
+      <lugar>Auditorio Nacional</lugar>
+      <fecha>2026-11-02</fecha>
+      <hora>19:00:00</hora>
+      <descripcion>Una presentación que combina música mexicana, sonidos tradicionales y una interpretación vocal única.</descripcion>
+      <ticketTipo>Platino</ticketTipo>
+      <ticketPrecio>2200</ticketPrecio>
+      <ticketDisponibles>80</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>600</precio>
+          <disponibles>180</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>1400</precio>
+          <disponibles>100</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>Platino</tipo>
+          <precio>2200</precio>
+          <disponibles>80</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/79e84fd1-6c71-458f-ac80-ba923a9e3046.jpg</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
+    <concierto id="d6a70f54-be98-4c35-8b42-4c9d5e1fa673">
+      <nombre>The Romantic Tour</nombre>
+      <artista>Bruno Mars</artista>
+      <lugar>Estadio GNP Seguros</lugar>
+      <fecha>2026-12-11</fecha>
+      <hora>21:00:00</hora>
+      <descripcion>Un espectáculo internacional con pop, funk, R&amp;B y los éxitos más reconocidos de Bruno Mars.</descripcion>
+      <ticketTipo>Platino</ticketTipo>
+      <ticketPrecio>4500</ticketPrecio>
+      <ticketDisponibles>90</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>1500</precio>
+          <disponibles>250</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>3000</precio>
+          <disponibles>150</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>Platino</tipo>
+          <precio>4500</precio>
+          <disponibles>90</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/c66d6415-fe31-444f-9358-e94917927bcd.jpg</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
+    <concierto id="e7b81a65-cfa9-4d46-9c53-5dae6f2ab784">
+      <nombre>World Tour</nombre>
+      <artista>Aitana</artista>
+      <lugar>Auditorio Nacional</lugar>
+      <fecha>2026-11-05</fecha>
+      <hora>20:30:00</hora>
+      <descripcion>Una noche de pop español con coreografías, canciones emotivas y una producción escénica especial.</descripcion>
+      <ticketTipo>VIP</ticketTipo>
+      <ticketPrecio>1900</ticketPrecio>
+      <ticketDisponibles>75</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>700</precio>
+          <disponibles>180</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>1900</precio>
+          <disponibles>75</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/28d8059c-c5b9-4d00-8625-4fb1a3dbdaf6.jpg</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
+    <concierto id="f8c92b76-d0ba-4e57-8d64-6ebf703bc895">
+      <nombre>Con quién se queda el Reno?</nombre>
+      <artista>Jesse y Joy</artista>
+      <lugar>Auditorio Nacional</lugar>
+      <fecha>2026-12-06</fecha>
+      <hora>18:00:00</hora>
+      <descripcion>Un concierto de pop latino con baladas, canciones románticas y los temas más populares del dúo.</descripcion>
+      <ticketTipo>Platino</ticketTipo>
+      <ticketPrecio>2400</ticketPrecio>
+      <ticketDisponibles>60</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>800</precio>
+          <disponibles>150</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>1600</precio>
+          <disponibles>100</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>Platino</tipo>
+          <precio>2400</precio>
+          <disponibles>60</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/ad854a26-7616-4824-9771-4369879a4155.jpg</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
+    <concierto id="a9d03c87-e1cb-4f68-9e75-7fc0814cd906">
+      <nombre>Los Ángeles Azules Sinfónico</nombre>
+      <artista>Los Ángeles Azules</artista>
+      <lugar>Auditorio Nacional</lugar>
+      <fecha>2026-11-20</fecha>
+      <hora>20:30:00</hora>
+      <descripcion>Una celebración de la cumbia mexicana con canciones emblemáticas para bailar y cantar.</descripcion>
+      <ticketTipo>VIP</ticketTipo>
+      <ticketPrecio>2000</ticketPrecio>
+      <ticketDisponibles>100</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>650</precio>
+          <disponibles>200</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>2000</precio>
+          <disponibles>100</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/99a2dd54-9ac7-4a71-b9b9-316060323e93.jpg</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
+    <concierto id="b0e14d98-f2dc-4079-8f86-8ad1925de017">
+      <nombre>ICÓNICA TOUR</nombre>
+      <artista>Yuri</artista>
+      <lugar>Auditorio Nacional</lugar>
+      <fecha>2026-12-01</fecha>
+      <hora>20:30:00</hora>
+      <descripcion>Una velada musical con grandes clásicos del pop en español y una de las voces más reconocidas de México.</descripcion>
+      <ticketTipo>Platino</ticketTipo>
+      <ticketPrecio>2100</ticketPrecio>
+      <ticketDisponibles>70</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>700</precio>
+          <disponibles>160</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>1400</precio>
+          <disponibles>100</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>Platino</tipo>
+          <precio>2100</precio>
+          <disponibles>70</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/ce5bdfa5-ee8d-487d-976b-bf6e4f01fe08.png</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
+    <concierto id="c1f25ea9-03ed-418a-9a97-9be2a63ef128">
+      <nombre>The Mars Volta</nombre>
+      <artista>The Mars Volta</artista>
+      <lugar>Pepsi Center</lugar>
+      <fecha>2026-11-29</fecha>
+      <hora>20:00:00</hora>
+      <descripcion>Una presentación de rock progresivo y experimental con arreglos intensos y una propuesta sonora alternativa.</descripcion>
+      <ticketTipo>VIP</ticketTipo>
+      <ticketPrecio>1800</ticketPrecio>
+      <ticketDisponibles>65</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>750</precio>
+          <disponibles>150</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>1800</precio>
+          <disponibles>65</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/d25ea831-47ea-48a5-94d2-5da6903c0104.jpg</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
+    <concierto id="d2a36fba-14fe-429b-8ba8-acf3b740e239">
+      <nombre>AHORA O NUNCA</nombre>
+      <artista>María José</artista>
+      <lugar>Auditorio Nacional</lugar>
+      <fecha>2026-12-11</fecha>
+      <hora>20:30:00</hora>
+      <descripcion>Un espectáculo de pop mexicano con baladas, temas de baile y canciones que han marcado su trayectoria.</descripcion>
+      <ticketTipo>Platino</ticketTipo>
+      <ticketPrecio>2300</ticketPrecio>
+      <ticketDisponibles>85</ticketDisponibles>
+      <boletos>
+        <boleto>
+          <tipo>General</tipo>
+          <precio>750</precio>
+          <disponibles>180</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>VIP</tipo>
+          <precio>1500</precio>
+          <disponibles>120</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>Platino</tipo>
+          <precio>2300</precio>
+          <disponibles>85</disponibles>
+        </boleto>
+      </boletos>
+      <imagen>/images/a5eb50e9-4081-4db2-855f-9e547ceaedfb.jpg</imagen>
+      <proximamente>false</proximamente>
+    </concierto>
   </conciertos>
   <compras>
     <compra id="9f9223c4-8e48-4d51-8b0c-fc4c9eb979c8">
@@ -105,6 +390,232 @@
       <fechaCompra>2026-10-21T02:00:15.022Z</fechaCompra>
       <usuarioId>082b3b3e-1dce-493c-b757-120fa019ec4c</usuarioId>
     </compra>
+    
+    <compra id="e0010001-0001-4000-8000-000000000001">
+      <conciertoId>878e6df8-b27b-4beb-8390-0bc056b32087</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T15:10:00.000Z</fechaCompra>
+      <usuarioId>10000001-0000-4000-8000-000000000001</usuarioId>
+    </compra>
+    <compra id="e0010002-0002-4000-8000-000000000002">
+      <conciertoId>a3f47c21-8d65-4b92-9e10-1f6a2c8b7340</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T15:12:00.000Z</fechaCompra>
+      <usuarioId>10000001-0000-4000-8000-000000000001</usuarioId>
+    </compra>
+
+    <compra id="e0020001-0003-4000-8000-000000000003">
+      <conciertoId>b4e58d32-9c76-4a13-8f20-2a7b3d9c8451</conciertoId>
+      <tipoBoleto>Platino</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T15:20:00.000Z</fechaCompra>
+      <usuarioId>10000002-0000-4000-8000-000000000002</usuarioId>
+    </compra>
+    <compra id="e0020002-0004-4000-8000-000000000004">
+      <conciertoId>c5f69e43-ad87-4b24-9a31-3b8c4e0d9562</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T15:22:00.000Z</fechaCompra>
+      <usuarioId>10000002-0000-4000-8000-000000000002</usuarioId>
+    </compra>
+
+    <compra id="e0030001-0005-4000-8000-000000000005">
+      <conciertoId>d6a70f54-be98-4c35-8b42-4c9d5e1fa673</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T15:30:00.000Z</fechaCompra>
+      <usuarioId>10000003-0000-4000-8000-000000000003</usuarioId>
+    </compra>
+    <compra id="e0030002-0006-4000-8000-000000000006">
+      <conciertoId>e7b81a65-cfa9-4d46-9c53-5dae6f2ab784</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T15:32:00.000Z</fechaCompra>
+      <usuarioId>10000003-0000-4000-8000-000000000003</usuarioId>
+    </compra>
+
+    <compra id="e0040001-0007-4000-8000-000000000007">
+      <conciertoId>f8c92b76-d0ba-4e57-8d64-6ebf703bc895</conciertoId>
+      <tipoBoleto>Platino</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T15:40:00.000Z</fechaCompra>
+      <usuarioId>10000004-0000-4000-8000-000000000004</usuarioId>
+    </compra>
+    <compra id="e0040002-0008-4000-8000-000000000008">
+      <conciertoId>a9d03c87-e1cb-4f68-9e75-7fc0814cd906</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T15:42:00.000Z</fechaCompra>
+      <usuarioId>10000004-0000-4000-8000-000000000004</usuarioId>
+    </compra>
+
+    <compra id="e0050001-0009-4000-8000-000000000009">
+      <conciertoId>b0e14d98-f2dc-4079-8f86-8ad1925de017</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T15:50:00.000Z</fechaCompra>
+      <usuarioId>10000005-0000-4000-8000-000000000005</usuarioId>
+    </compra>
+    <compra id="e0050002-0010-4000-8000-000000000010">
+      <conciertoId>c1f25ea9-03ed-418a-9a97-9be2a63ef128</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T15:52:00.000Z</fechaCompra>
+      <usuarioId>10000005-0000-4000-8000-000000000005</usuarioId>
+    </compra>
+
+    <compra id="e0060001-0011-4000-8000-000000000011">
+      <conciertoId>d2a36fba-14fe-429b-8ba8-acf3b740e239</conciertoId>
+      <tipoBoleto>Platino</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T16:00:00.000Z</fechaCompra>
+      <usuarioId>10000006-0000-4000-8000-000000000006</usuarioId>
+    </compra>
+    <compra id="e0060002-0012-4000-8000-000000000012">
+      <conciertoId>878e6df8-b27b-4beb-8390-0bc056b32087</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T16:02:00.000Z</fechaCompra>
+      <usuarioId>10000006-0000-4000-8000-000000000006</usuarioId>
+    </compra>
+
+    <compra id="e0070001-0013-4000-8000-000000000013">
+      <conciertoId>a3f47c21-8d65-4b92-9e10-1f6a2c8b7340</conciertoId>
+      <tipoBoleto>Platino</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T16:10:00.000Z</fechaCompra>
+      <usuarioId>10000007-0000-4000-8000-000000000007</usuarioId>
+    </compra>
+    <compra id="e0070002-0014-4000-8000-000000000014">
+      <conciertoId>b4e58d32-9c76-4a13-8f20-2a7b3d9c8451</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T16:12:00.000Z</fechaCompra>
+      <usuarioId>10000007-0000-4000-8000-000000000007</usuarioId>
+    </compra>
+
+    <compra id="e0080001-0015-4000-8000-000000000015">
+      <conciertoId>c5f69e43-ad87-4b24-9a31-3b8c4e0d9562</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T16:20:00.000Z</fechaCompra>
+      <usuarioId>10000008-0000-4000-8000-000000000008</usuarioId>
+    </compra>
+    <compra id="e0080002-0016-4000-8000-000000000016">
+      <conciertoId>d6a70f54-be98-4c35-8b42-4c9d5e1fa673</conciertoId>
+      <tipoBoleto>Platino</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T16:22:00.000Z</fechaCompra>
+      <usuarioId>10000008-0000-4000-8000-000000000008</usuarioId>
+    </compra>
+
+    <compra id="e0090001-0017-4000-8000-000000000017">
+      <conciertoId>e7b81a65-cfa9-4d46-9c53-5dae6f2ab784</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T16:30:00.000Z</fechaCompra>
+      <usuarioId>10000009-0000-4000-8000-000000000009</usuarioId>
+    </compra>
+    <compra id="e0090002-0018-4000-8000-000000000018">
+      <conciertoId>f8c92b76-d0ba-4e57-8d64-6ebf703bc895</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T16:32:00.000Z</fechaCompra>
+      <usuarioId>10000009-0000-4000-8000-000000000009</usuarioId>
+    </compra>
+
+    <compra id="e0100001-0019-4000-8000-000000000019">
+      <conciertoId>a9d03c87-e1cb-4f68-9e75-7fc0814cd906</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T16:40:00.000Z</fechaCompra>
+      <usuarioId>10000010-0000-4000-8000-000000000010</usuarioId>
+    </compra>
+    <compra id="e0100002-0020-4000-8000-000000000020">
+      <conciertoId>b0e14d98-f2dc-4079-8f86-8ad1925de017</conciertoId>
+      <tipoBoleto>Platino</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T16:42:00.000Z</fechaCompra>
+      <usuarioId>10000010-0000-4000-8000-000000000010</usuarioId>
+    </compra>
+
+    <compra id="e0110001-0021-4000-8000-000000000021">
+      <conciertoId>c1f25ea9-03ed-418a-9a97-9be2a63ef128</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T16:50:00.000Z</fechaCompra>
+      <usuarioId>10000011-0000-4000-8000-000000000011</usuarioId>
+    </compra>
+    <compra id="e0110002-0022-4000-8000-000000000022">
+      <conciertoId>d2a36fba-14fe-429b-8ba8-acf3b740e239</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T16:52:00.000Z</fechaCompra>
+      <usuarioId>10000011-0000-4000-8000-000000000011</usuarioId>
+    </compra>
+
+    <compra id="e0120001-0023-4000-8000-000000000023">
+      <conciertoId>878e6df8-b27b-4beb-8390-0bc056b32087</conciertoId>
+      <tipoBoleto>Platino</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T17:00:00.000Z</fechaCompra>
+      <usuarioId>10000012-0000-4000-8000-000000000012</usuarioId>
+    </compra>
+    <compra id="e0120002-0024-4000-8000-000000000024">
+      <conciertoId>e7b81a65-cfa9-4d46-9c53-5dae6f2ab784</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T17:02:00.000Z</fechaCompra>
+      <usuarioId>10000012-0000-4000-8000-000000000012</usuarioId>
+    </compra>
+
+    <compra id="e0130001-0025-4000-8000-000000000025">
+      <conciertoId>b4e58d32-9c76-4a13-8f20-2a7b3d9c8451</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T17:10:00.000Z</fechaCompra>
+      <usuarioId>10000013-0000-4000-8000-000000000013</usuarioId>
+    </compra>
+    <compra id="e0130002-0026-4000-8000-000000000026">
+      <conciertoId>f8c92b76-d0ba-4e57-8d64-6ebf703bc895</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T17:12:00.000Z</fechaCompra>
+      <usuarioId>10000013-0000-4000-8000-000000000013</usuarioId>
+    </compra>
+
+    <compra id="e0140001-0027-4000-8000-000000000027">
+      <conciertoId>d6a70f54-be98-4c35-8b42-4c9d5e1fa673</conciertoId>
+      <tipoBoleto>Platino</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T17:20:00.000Z</fechaCompra>
+      <usuarioId>10000014-0000-4000-8000-000000000014</usuarioId>
+    </compra>
+    <compra id="e0140002-0028-4000-8000-000000000028">
+      <conciertoId>a9d03c87-e1cb-4f68-9e75-7fc0814cd906</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T17:22:00.000Z</fechaCompra>
+      <usuarioId>10000014-0000-4000-8000-000000000014</usuarioId>
+    </compra>
+
+    <compra id="e0150001-0029-4000-8000-000000000029">
+      <conciertoId>c1f25ea9-03ed-418a-9a97-9be2a63ef128</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>2</cantidad>
+      <fechaCompra>2026-10-20T17:30:00.000Z</fechaCompra>
+      <usuarioId>10000015-0000-4000-8000-000000000015</usuarioId>
+    </compra>
+    <compra id="e0150002-0030-4000-8000-000000000030">
+      <conciertoId>b0e14d98-f2dc-4079-8f86-8ad1925de017</conciertoId>
+      <tipoBoleto>General</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-20T17:32:00.000Z</fechaCompra>
+      <usuarioId>10000015-0000-4000-8000-000000000015</usuarioId>
+    </compra>
+
   </compras>
   <usuarios>
     <usuario id="cb057a4f-bba3-4fea-b69b-57677ab6a829">
@@ -177,5 +688,217 @@
       <telefono>1234567891</telefono>
       <rol>usuario</rol>
     </usuario>
+    
+    <usuario id="10000001-0000-4000-8000-000000000001">
+      <username>sofia_m</username>
+      <password>demo-salt-0001:demo-hash-0001</password>
+      <rol>usuario</rol>
+      <nombre>Sofia</nombre>
+      <apellidoPaterno>Martinez</apellidoPaterno>
+      <apellidoMaterno>Lopez</apellidoMaterno>
+      <diaNacimiento>12</diaNacimiento>
+      <mesNacimiento>3</mesNacimiento>
+      <anioNacimiento>2002</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>sofia.martinez@example.com</correo>
+      <telefono>2211000001</telefono>
+    </usuario>
+    <usuario id="10000002-0000-4000-8000-000000000002">
+      <username>alex_rivera</username>
+      <password>demo-salt-0002:demo-hash-0002</password>
+      <rol>usuario</rol>
+      <nombre>Alex</nombre>
+      <apellidoPaterno>Rivera</apellidoPaterno>
+      <apellidoMaterno>Torres</apellidoMaterno>
+      <diaNacimiento>8</diaNacimiento>
+      <mesNacimiento>7</mesNacimiento>
+      <anioNacimiento>2001</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>alex.rivera@example.com</correo>
+      <telefono>2211000002</telefono>
+    </usuario>
+    <usuario id="10000003-0000-4000-8000-000000000003">
+      <username>valeria_g</username>
+      <password>demo-salt-0003:demo-hash-0003</password>
+      <rol>usuario</rol>
+      <nombre>Valeria</nombre>
+      <apellidoPaterno>Garcia</apellidoPaterno>
+      <apellidoMaterno>Morales</apellidoMaterno>
+      <diaNacimiento>21</diaNacimiento>
+      <mesNacimiento>1</mesNacimiento>
+      <anioNacimiento>2003</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>valeria.garcia@example.com</correo>
+      <telefono>2211000003</telefono>
+    </usuario>
+    <usuario id="10000004-0000-4000-8000-000000000004">
+      <username>emilio_c</username>
+      <password>demo-salt-0004:demo-hash-0004</password>
+      <rol>usuario</rol>
+      <nombre>Emilio</nombre>
+      <apellidoPaterno>Castillo</apellidoPaterno>
+      <apellidoMaterno>Reyes</apellidoMaterno>
+      <diaNacimiento>15</diaNacimiento>
+      <mesNacimiento>9</mesNacimiento>
+      <anioNacimiento>2000</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>emilio.castillo@example.com</correo>
+      <telefono>2211000004</telefono>
+    </usuario>
+    <usuario id="10000005-0000-4000-8000-000000000005">
+      <username>camila_s</username>
+      <password>demo-salt-0005:demo-hash-0005</password>
+      <rol>usuario</rol>
+      <nombre>Camila</nombre>
+      <apellidoPaterno>Sanchez</apellidoPaterno>
+      <apellidoMaterno>Flores</apellidoMaterno>
+      <diaNacimiento>4</diaNacimiento>
+      <mesNacimiento>11</mesNacimiento>
+      <anioNacimiento>2004</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>camila.sanchez@example.com</correo>
+      <telefono>2211000005</telefono>
+    </usuario>
+    <usuario id="10000006-0000-4000-8000-000000000006">
+      <username>mateo_h</username>
+      <password>demo-salt-0006:demo-hash-0006</password>
+      <rol>usuario</rol>
+      <nombre>Mateo</nombre>
+      <apellidoPaterno>Hernandez</apellidoPaterno>
+      <apellidoMaterno>Vega</apellidoMaterno>
+      <diaNacimiento>19</diaNacimiento>
+      <mesNacimiento>6</mesNacimiento>
+      <anioNacimiento>2002</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>mateo.hernandez@example.com</correo>
+      <telefono>2211000006</telefono>
+    </usuario>
+    <usuario id="10000007-0000-4000-8000-000000000007">
+      <username>daniela_p</username>
+      <password>demo-salt-0007:demo-hash-0007</password>
+      <rol>usuario</rol>
+      <nombre>Daniela</nombre>
+      <apellidoPaterno>Perez</apellidoPaterno>
+      <apellidoMaterno>Jimenez</apellidoMaterno>
+      <diaNacimiento>27</diaNacimiento>
+      <mesNacimiento>4</mesNacimiento>
+      <anioNacimiento>2001</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>daniela.perez@example.com</correo>
+      <telefono>2211000007</telefono>
+    </usuario>
+    <usuario id="10000008-0000-4000-8000-000000000008">
+      <username>sebastian_l</username>
+      <password>demo-salt-0008:demo-hash-0008</password>
+      <rol>susuario</rol>
+      <nombre>Sebastian</nombre>
+      <apellidoPaterno>Lopez</apellidoPaterno>
+      <apellidoMaterno>Ramirez</apellidoMaterno>
+      <diaNacimiento>9</diaNacimiento>
+      <mesNacimiento>2</mesNacimiento>
+      <anioNacimiento>2000</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>sebastian.lopez@example.com</correo>
+      <telefono>2211000008</telefono>
+    </usuario>
+    <usuario id="10000009-0000-4000-8000-000000000009">
+      <username>fernanda_d</username>
+      <password>demo-salt-0009:demo-hash-0009</password>
+      <rol>usuario</rol>
+      <nombre>Fernanda</nombre>
+      <apellidoPaterno>Diaz</apellidoPaterno>
+      <apellidoMaterno>Ortega</apellidoMaterno>
+      <diaNacimiento>16</diaNacimiento>
+      <mesNacimiento>8</mesNacimiento>
+      <anioNacimiento>2003</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>fernanda.diaz@example.com</correo>
+      <telefono>2211000009</telefono>
+    </usuario>
+    <usuario id="10000010-0000-4000-8000-000000000010">
+      <username>diego_v</username>
+      <password>demo-salt-0010:demo-hash-0010</password>
+      <rol>usuario</rol>
+      <nombre>Diego</nombre>
+      <apellidoPaterno>Vargas</apellidoPaterno>
+      <apellidoMaterno>Medina</apellidoMaterno>
+      <diaNacimiento>23</diaNacimiento>
+      <mesNacimiento>12</mesNacimiento>
+      <anioNacimiento>2002</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>diego.vargas@example.com</correo>
+      <telefono>2211000010</telefono>
+    </usuario>
+    <usuario id="10000011-0000-4000-8000-000000000011">
+      <username>renata_b</username>
+      <password>demo-salt-0011:demo-hash-0011</password>
+      <rol>usuario</rol>
+      <nombre>Renata</nombre>
+      <apellidoPaterno>Blanco</apellidoPaterno>
+      <apellidoMaterno>Rojas</apellidoMaterno>
+      <diaNacimiento>6</diaNacimiento>
+      <mesNacimiento>5</mesNacimiento>
+      <anioNacimiento>2004</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>renata.blanco@example.com</correo>
+      <telefono>2211000011</telefono>
+    </usuario>
+    <usuario id="10000012-0000-4000-8000-000000000012">
+      <username>andres_n</username>
+      <password>demo-salt-0012:demo-hash-0012</password>
+      <rol>usuario</rol>
+      <nombre>Andres</nombre>
+      <apellidoPaterno>Navarro</apellidoPaterno>
+      <apellidoMaterno>Cruz</apellidoMaterno>
+      <diaNacimiento>14</diaNacimiento>
+      <mesNacimiento>10</mesNacimiento>
+      <anioNacimiento>2001</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>andres.navarro@example.com</correo>
+      <telefono>2211000012</telefono>
+    </usuario>
+    <usuario id="10000013-0000-4000-8000-000000000013">
+      <username>isabella_t</username>
+      <password>demo-salt-0013:demo-hash-0013</password>
+      <rol>usuario</rol>
+      <nombre>Isabella</nombre>
+      <apellidoPaterno>Torres</apellidoPaterno>
+      <apellidoMaterno>Aguilar</apellidoMaterno>
+      <diaNacimiento>30</diaNacimiento>
+      <mesNacimiento>3</mesNacimiento>
+      <anioNacimiento>2003</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>isabella.torres@example.com</correo>
+      <telefono>2211000013</telefono>
+    </usuario>
+    <usuario id="10000014-0000-4000-8000-000000000014">
+      <username>gabriel_o</username>
+      <password>demo-salt-0014:demo-hash-0014</password>
+      <rol>usuario</rol>
+      <nombre>Gabriel</nombre>
+      <apellidoPaterno>Ortega</apellidoPaterno>
+      <apellidoMaterno>Silva</apellidoMaterno>
+      <diaNacimiento>2</diaNacimiento>
+      <mesNacimiento>6</mesNacimiento>
+      <anioNacimiento>2000</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>gabriel.ortega@example.com</correo>
+      <telefono>2211000014</telefono>
+    </usuario>
+    <usuario id="10000015-0000-4000-8000-000000000015">
+      <username>ximena_r</username>
+      <password>demo-salt-0015:demo-hash-0015</password>
+      <rol>usuario</rol>
+      <nombre>Ximena</nombre>
+      <apellidoPaterno>Romero</apellidoPaterno>
+      <apellidoMaterno>Campos</apellidoMaterno>
+      <diaNacimiento>18</diaNacimiento>
+      <mesNacimiento>7</mesNacimiento>
+      <anioNacimiento>2004</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>ximena.romero@example.com</correo>
+      <telefono>2211000015</telefono>
+    </usuario>
+
   </usuarios>
 </eventos>

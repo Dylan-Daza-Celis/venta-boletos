@@ -19,7 +19,6 @@ const sessions = new Map();
 
 app.use(express.json({ limit: "8mb" }));
 app.use("/views", express.static(path.join(__dirname, "views")));
-app.use("/semantic", express.static(path.join(__dirname, "semantic")));
 app.use(express.static(path.join(__dirname, "public")));
 
 const resourceConfig = {
@@ -117,16 +116,33 @@ function isAdult(day, month, year) {
 function validateUserDetails(data) {
   const required = ["nombre", "apellidoPaterno", "apellidoMaterno", "genero", "correo", "telefono", "diaNacimiento", "mesNacimiento", "anioNacimiento"];
   if (required.some((field) => !String(data[field] || "").trim())) return "Todos los datos personales son obligatorios.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.correo)) return "El correo electrónico no es válido.";
+  const namePattern = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:[ '-][A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)*$/;
+  if (["nombre", "apellidoPaterno", "apellidoMaterno"].some((field) => !namePattern.test(String(data[field]).trim()))) {
+    return "Los nombres solo pueden contener letras, espacios, apóstrofes o guiones.";
+  }
+  if (["nombre", "apellidoPaterno", "apellidoMaterno"].some((field) => String(data[field]).trim().length < 2 || String(data[field]).trim().length > 50)) {
+    return "Los nombres deben tener entre 2 y 50 caracteres.";
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(String(data.correo).trim()) || String(data.correo).length > 120) {
+    return "El correo electrónico no es válido.";
+  }
+  if (!/^\d{10}$/.test(String(data.telefono).trim())) return "El teléfono debe contener exactamente 10 dígitos.";
   if (!["Hombre", "Mujer", "Personalizado", "Prefiero no decirlo"].includes(data.genero)) return "Selecciona un género válido.";
   if (!isAdult(data.diaNacimiento, data.mesNacimiento, data.anioNacimiento)) return "Debes tener al menos 18 años y una fecha válida.";
   return null;
+}
+
+function validateUsername(username) {
+  return /^[A-Za-z0-9_.-]{3,30}$/.test(String(username || "").trim())
+    ? null
+    : "El usuario debe tener de 3 a 30 caracteres y solo usar letras, números, punto, guion o guion bajo.";
 }
 
 function validatePasswordConfirmation(data, required = false) {
   const password = String(data.password || "");
   const confirmation = String(data.confirmPassword || "");
   if (required && !password) return "La contraseña es obligatoria.";
+  if (password && (password.length < 4 || password.length > 128)) return "La contraseña debe tener entre 4 y 128 caracteres.";
   if (password && password !== confirmation) return "Las contraseñas no coinciden.";
   return null;
 }
@@ -223,6 +239,34 @@ function soldByTicket(database, concertId, ticketType, ignoredPurchaseId) {
     .reduce((total, purchase) => total + Number(purchase.cantidad), 0);
 }
 
+function eventHasPassed(concert) {
+  if (concert.proximamente) return false;
+  const eventDate = new Date(`${concert.fecha}T${concert.hora || "00:00:00"}`);
+  return !Number.isNaN(eventDate.getTime()) && eventDate <= new Date();
+}
+
+function removeUserPurchases(database, user) {
+  const purchases = collection(database, "compras");
+  const userPurchases = purchases.filter((purchase) => (
+    purchase.usuarioId === itemId(user) || purchase.usuario === user.username
+  ));
+  for (const purchase of userPurchases) {
+    const concert = collection(database, "conciertos")
+      .find((item) => itemId(item) === purchase.conciertoId);
+    const ticket = concert && ticketsOf(concert)
+      .find((item) => item.tipo === purchase.tipoBoleto);
+    if (ticket && !eventHasPassed(concert)) {
+      ticket.disponibles = Number(ticket.disponibles) + Number(purchase.cantidad);
+    }
+  }
+  saveCollection(
+    database,
+    "compras",
+    purchases.filter((purchase) => !userPurchases.includes(purchase))
+  );
+  saveCollection(database, "conciertos", collection(database, "conciertos"));
+}
+
 function validateItem(resource, item, database) {
   const config = resourceConfig[resource];
   if (!config) return "Recurso no encontrado.";
@@ -234,6 +278,11 @@ function validateItem(resource, item, database) {
   }
 
   if (resource === "conciertos") {
+    for (const field of ["nombre", "artista", "lugar"]) {
+      const value = String(item[field] || "").trim();
+      if (value.length < 2 || value.length > 120) return `El campo "${field}" debe tener entre 2 y 120 caracteres.`;
+    }
+    if (item.descripcion && String(item.descripcion).length > 1000) return "La descripción no puede superar 1000 caracteres.";
     if (!item.lugar || (!item.proximamente && !item.hora)) {
       return item.proximamente
         ? "Los eventos próximos necesitan lugar."
@@ -245,7 +294,7 @@ function validateItem(resource, item, database) {
     if (new Set(tickets.map((ticket) => String(ticket.tipo).trim().toLowerCase())).size !== tickets.length) {
       return "No puedes repetir el tipo de boleto.";
     }
-    if (tickets.some((ticket) => !ticket.tipo || !Number.isFinite(Number(ticket.precio)) || Number(ticket.precio) < 0 || !Number.isInteger(Number(ticket.disponibles)) || Number(ticket.disponibles) < 0)) {
+    if (tickets.some((ticket) => !ticket.tipo || String(ticket.tipo).trim().length > 50 || !Number.isFinite(Number(ticket.precio)) || Number(ticket.precio) < 0 || Number(ticket.precio) > 10000000 || !Number.isInteger(Number(ticket.disponibles)) || Number(ticket.disponibles) < 0 || Number(ticket.disponibles) > 1000000)) {
       return "Cada boleto necesita tipo, precio válido y lugares disponibles.";
     }
     const concertId = item.id || item["@_id"];
@@ -268,6 +317,7 @@ function validateItem(resource, item, database) {
   if (resource === "compras") {
     const concert = collection(database, "conciertos").find((concertItem) => itemId(concertItem) === item.conciertoId);
     if (!concert) return "El concierto seleccionado no existe.";
+    if (eventHasPassed(concert)) return "No se pueden comprar boletos para un evento terminado.";
     const quantity = Number(item.cantidad);
     if (!Number.isInteger(quantity) || quantity <= 0) return "La cantidad debe ser un entero positivo.";
     const ticket = ticketsOf(concert).find((ticketItem) => ticketItem.tipo === item.tipoBoleto);
@@ -307,6 +357,7 @@ app.get("/catalogo", async (req, res, next) => {
   try {
     const user = currentUser(req);
     if (!user) return res.redirect("/login.html?returnTo=%2Fcatalogo");
+    if (user.rol !== "admin") return res.status(403).send("No tienes permisos para ver este catálogo.");
     const database = await readDatabase();
     const purchases = collection(database, "compras").filter((purchase) => userOwnsPurchase(purchase, user));
     database.eventos.compras = {
@@ -322,6 +373,19 @@ app.get("/catalogo", async (req, res, next) => {
     res.type("application/xml").send(
       `<?xml version="1.0" encoding="UTF-8"?>\n<?xml-stylesheet type="text/xsl" href="/views/database.xsl"?>\n${xml}`
     );
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/semantic/conciertos.rdf", async (req, res, next) => {
+  try {
+    const user = requireRole(req, res, "admin");
+    if (!user) return;
+    res.type("application/rdf+xml").send(await fs.readFile(
+      path.join(__dirname, "semantic", "conciertos.rdf"),
+      "utf8"
+    ));
   } catch (error) {
     next(error);
   }
@@ -349,6 +413,9 @@ app.get("/api/reportes/conciertos/:id", async (req, res, next) => {
     const concert = collection(database, "conciertos")
       .find((item) => itemId(item) === req.params.id);
     if (!concert) return res.status(404).json({ error: "Evento no encontrado." });
+    if (concert.proximamente) {
+      return res.status(400).json({ error: "Los eventos próximos todavía no tienen reporte de ventas." });
+    }
 
     const purchases = purchasesFor(database, req.params.id);
     const tickets = ticketsOf(concert);
@@ -434,8 +501,10 @@ async function createUser(req, res, next, role) {
   try {
     if (role === "admin" && !requireRole(req, res, "admin")) return;
     const { username, password } = req.body;
-    if (!username || !password || String(username).length < 3 || String(password).length < 4) {
-      return res.status(400).json({ error: "El usuario debe tener al menos 3 caracteres y la contraseña 4." });
+    const usernameError = validateUsername(username);
+    if (usernameError) return res.status(400).json({ error: usernameError });
+    if (!password || String(password).length < 4 || String(password).length > 128) {
+      return res.status(400).json({ error: "La contraseña debe tener entre 4 y 128 caracteres." });
     }
     const passwordError = validatePasswordConfirmation(req.body, true);
     if (passwordError) return res.status(400).json({ error: passwordError });
@@ -500,8 +569,10 @@ app.put("/api/admin/usuarios/:id", async (req, res, next) => {
     const current = users[index];
     const username = String(req.body.username || "").trim();
     const details = { ...current, ...req.body, username };
-    if (!username || username.length < 3) {
-      return res.status(400).json({ error: "El usuario debe tener al menos 3 caracteres." });
+    const usernameError = validateUsername(username);
+    if (usernameError) return res.status(400).json({ error: usernameError });
+    if (!["usuario", "admin"].includes(String(details.rol))) {
+      return res.status(400).json({ error: "Selecciona un rol válido." });
     }
     const detailsError = validateUserDetails(details);
     if (detailsError) return res.status(400).json({ error: detailsError });
@@ -514,6 +585,8 @@ app.put("/api/admin/usuarios/:id", async (req, res, next) => {
       && item.correo?.toLowerCase() === String(details.correo).toLowerCase())) {
       return res.status(409).json({ error: "Ese correo electrónico ya está registrado." });
     }
+    const promotedToAdmin = current.rol !== "admin" && details.rol === "admin";
+    if (promotedToAdmin) removeUserPurchases(database, current);
 
     Object.assign(current, {
       username,
@@ -673,6 +746,9 @@ app.post("/api/:resource", async (req, res, next) => {
     if (!resourceConfig[req.params.resource]) return res.status(404).json({ error: "Recurso no encontrado." });
     const user = req.params.resource === "conciertos" ? requireRole(req, res, "admin") : requireAuth(req, res);
     if (!user) return;
+    if (req.params.resource === "compras" && user.rol === "admin") {
+      return res.status(403).json({ error: "Los administradores no pueden comprar boletos." });
+    }
     const database = await readDatabase();
     const requestItem = req.params.resource === "compras"
       ? { conciertoId: req.body.conciertoId, tipoBoleto: req.body.tipoBoleto, cantidad: req.body.cantidad }
