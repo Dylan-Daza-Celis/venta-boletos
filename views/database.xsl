@@ -131,9 +131,9 @@
         </header>
 
         <main>
-          <h2>Próximos conciertos</h2>
+          <h2>Eventos actuales</h2>
           <div class="grid">
-            <xsl:for-each select="eventos/conciertos/concierto">
+            <xsl:for-each select="eventos/conciertos/concierto[not(proximamente = 'true')]">
               <article class="concert">
                 <xsl:choose>
                   <xsl:when test="imagen"><img class="concert-image" src="{imagen}" alt="Imagen de {nombre}"/></xsl:when>
@@ -156,8 +156,28 @@
                 </div>
               </article>
             </xsl:for-each>
-            <xsl:if test="not(eventos/conciertos/concierto)">
-              <p class="muted">Aún no hay conciertos publicados.</p>
+            <xsl:if test="not(eventos/conciertos/concierto[not(proximamente = 'true')])">
+              <p class="muted">Aún no hay eventos actuales.</p>
+            </xsl:if>
+          </div>
+
+          <h2>Próximamente</h2>
+          <div class="grid">
+            <xsl:for-each select="eventos/conciertos/concierto[proximamente = 'true']">
+              <article class="concert">
+                <xsl:choose>
+                  <xsl:when test="imagen"><img class="concert-image" src="{imagen}" alt="Imagen de {nombre}"/></xsl:when>
+                  <xsl:otherwise><div class="concert-placeholder">SONORA</div></xsl:otherwise>
+                </xsl:choose>
+                <div class="concert-content">
+                  <h3><xsl:value-of select="nombre"/></h3>
+                  <p><strong><xsl:value-of select="artista"/></strong></p>
+                  <p>Fecha: <xsl:value-of select="fecha"/></p>
+                </div>
+              </article>
+            </xsl:for-each>
+            <xsl:if test="not(eventos/conciertos/concierto[proximamente = 'true'])">
+              <p class="muted">Aún no hay eventos próximos.</p>
             </xsl:if>
           </div>
 

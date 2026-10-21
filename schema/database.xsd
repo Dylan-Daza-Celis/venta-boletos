@@ -9,9 +9,9 @@
               <xs:complexType><xs:sequence>
                 <xs:element name="nombre" type="xs:string"/>
                 <xs:element name="artista" type="xs:string"/>
-                <xs:element name="lugar" type="xs:string"/>
+                <xs:element name="lugar" type="xs:string" minOccurs="0"/>
                 <xs:element name="fecha" type="xs:date"/>
-                <xs:element name="hora" type="xs:time"/>
+                <xs:element name="hora" type="xs:time" minOccurs="0"/>
                 <xs:element name="descripcion" type="xs:string" minOccurs="0"/>
                 <xs:element name="imagen" type="xs:anyURI" minOccurs="0"/>
                 <xs:element name="boletos"><xs:complexType><xs:sequence>
@@ -21,6 +21,7 @@
                     <xs:element name="disponibles" type="xs:nonNegativeInteger"/>
                   </xs:sequence></xs:complexType></xs:element>
                 </xs:sequence></xs:complexType></xs:element>
+                <xs:element name="proximamente" type="xs:boolean" minOccurs="0"/>
               </xs:sequence><xs:attribute name="id" type="xs:string" use="required"/></xs:complexType>
             </xs:element>
           </xs:sequence></xs:complexType>

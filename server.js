@@ -17,7 +17,7 @@ const builder = new XMLBuilder({
 });
 const sessions = new Map();
 
-app.use(express.json());
+app.use(express.json({ limit: "8mb" }));
 app.use("/views", express.static(path.join(__dirname, "views")));
 app.use("/semantic", express.static(path.join(__dirname, "semantic")));
 app.use(express.static(path.join(__dirname, "public")));
@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 const resourceConfig = {
   conciertos: {
     singular: "concierto",
-    required: ["nombre", "artista", "lugar", "fecha", "hora"]
+    required: ["nombre", "artista", "fecha"]
   },
   compras: {
     singular: "compra",
@@ -120,6 +120,14 @@ function validateUserDetails(data) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.correo)) return "El correo electrónico no es válido.";
   if (!["Hombre", "Mujer", "Personalizado", "Prefiero no decirlo"].includes(data.genero)) return "Selecciona un género válido.";
   if (!isAdult(data.diaNacimiento, data.mesNacimiento, data.anioNacimiento)) return "Debes tener al menos 18 años y una fecha válida.";
+  return null;
+}
+
+function validatePasswordConfirmation(data, required = false) {
+  const password = String(data.password || "");
+  const confirmation = String(data.confirmPassword || "");
+  if (required && !password) return "La contraseña es obligatoria.";
+  if (password && password !== confirmation) return "Las contraseñas no coinciden.";
   return null;
 }
 
@@ -226,9 +234,17 @@ function validateItem(resource, item, database) {
   }
 
   if (resource === "conciertos") {
-    if (Number.isNaN(Date.parse(`${item.fecha}T${item.hora}`))) return "La fecha u hora no es válida.";
+    if (!item.lugar || (!item.proximamente && !item.hora)) {
+      return item.proximamente
+        ? "Los eventos próximos necesitan lugar."
+        : "Los eventos actuales necesitan lugar y hora.";
+    }
+    if (!item.proximamente && Number.isNaN(Date.parse(`${item.fecha}T${item.hora}`))) return "La fecha u hora no es válida.";
     const tickets = asArray(item.boletos?.boleto || item.boletos);
     if (!tickets.length) return "Agrega al menos un tipo de boleto.";
+    if (new Set(tickets.map((ticket) => String(ticket.tipo).trim().toLowerCase())).size !== tickets.length) {
+      return "No puedes repetir el tipo de boleto.";
+    }
     if (tickets.some((ticket) => !ticket.tipo || !Number.isFinite(Number(ticket.precio)) || Number(ticket.precio) < 0 || !Number.isInteger(Number(ticket.disponibles)) || Number(ticket.disponibles) < 0)) {
       return "Cada boleto necesita tipo, precio válido y lugares disponibles.";
     }
@@ -277,6 +293,16 @@ function saveCollection(database, resource, items) {
   database.eventos[resource] = { [config.singular]: items };
 }
 
+async function saveUploadedImage(imageData) {
+  if (!imageData) return "";
+  const match = String(imageData).match(/^data:(image\/(?:jpeg|png|gif|webp));base64,([A-Za-z0-9+/=]+)$/);
+  if (!match) throw new Error("La imagen debe ser JPG, PNG, GIF o WEBP.");
+  const extension = match[1].split("/")[1].replace("jpeg", "jpg");
+  const fileName = `${randomUUID()}.${extension}`;
+  await fs.writeFile(path.join(imagesDirectory, fileName), Buffer.from(match[2], "base64"));
+  return `/images/${fileName}`;
+}
+
 app.get("/catalogo", async (req, res, next) => {
   try {
     const user = currentUser(req);
@@ -310,6 +336,50 @@ app.get("/api/imagenes", async (req, res, next) => {
         .filter((file) => file.isFile() && allowedExtensions.has(path.extname(file.name).toLowerCase()))
         .map((file) => ({ nombre: file.name, ruta: `/images/${encodeURIComponent(file.name)}` }))
     );
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/reportes/conciertos/:id", async (req, res, next) => {
+  try {
+    const user = requireRole(req, res, "admin");
+    if (!user) return;
+    const database = await readDatabase();
+    const concert = collection(database, "conciertos")
+      .find((item) => itemId(item) === req.params.id);
+    if (!concert) return res.status(404).json({ error: "Evento no encontrado." });
+
+    const purchases = purchasesFor(database, req.params.id);
+    const tickets = ticketsOf(concert);
+    const zones = tickets.map((ticket) => {
+      const sales = purchases
+        .filter((purchase) => purchase.tipoBoleto === ticket.tipo)
+        .reduce((total, purchase) => total + Number(purchase.cantidad), 0);
+      const available = Number(ticket.disponibles);
+      return {
+        tipo: ticket.tipo,
+        precio: Number(ticket.precio),
+        vendidos: sales,
+        disponibles: available,
+        capacidad: sales + available,
+        ingresos: sales * Number(ticket.precio)
+      };
+    });
+    const totalVentas = zones.reduce((total, zone) => total + zone.vendidos, 0);
+    const ingresos = zones.reduce((total, zone) => total + zone.ingresos, 0);
+    const eventDate = concert.hora
+      ? new Date(`${concert.fecha}T${concert.hora}`)
+      : new Date(`${concert.fecha}T00:00:00`);
+    const diasRestantes = Math.ceil((eventDate.getTime() - Date.now()) / 86400000);
+
+    res.json({
+      evento: { id: itemId(concert), nombre: concert.nombre, fecha: concert.fecha, hora: concert.hora || "" },
+      totalVentas,
+      ingresos,
+      diasRestantes,
+      zonas: zones
+    });
   } catch (error) {
     next(error);
   }
@@ -367,6 +437,8 @@ async function createUser(req, res, next, role) {
     if (!username || !password || String(username).length < 3 || String(password).length < 4) {
       return res.status(400).json({ error: "El usuario debe tener al menos 3 caracteres y la contraseña 4." });
     }
+    const passwordError = validatePasswordConfirmation(req.body, true);
+    if (passwordError) return res.status(400).json({ error: passwordError });
     const detailsError = validateUserDetails(req.body);
     if (detailsError) return res.status(400).json({ error: detailsError });
     const database = await readDatabase();
@@ -402,6 +474,119 @@ async function createUser(req, res, next, role) {
 app.post("/api/auth/register", (req, res, next) => createUser(req, res, next, "usuario"));
 app.post("/api/auth/admins", (req, res, next) => createUser(req, res, next, "admin"));
 
+app.get("/api/admin/usuarios", async (req, res, next) => {
+  try {
+    const user = requireRole(req, res, "admin");
+    if (!user) return;
+    const database = await readDatabase();
+    res.json(usersOf(database).map((item) => {
+      const { password, ...safeUser } = item;
+      return publicItem(safeUser);
+    }));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.put("/api/admin/usuarios/:id", async (req, res, next) => {
+  try {
+    const admin = requireRole(req, res, "admin");
+    if (!admin) return;
+    const database = await readDatabase();
+    const users = usersOf(database);
+    const index = users.findIndex((item) => itemId(item) === req.params.id);
+    if (index === -1) return res.status(404).json({ error: "Usuario no encontrado." });
+
+    const current = users[index];
+    const username = String(req.body.username || "").trim();
+    const details = { ...current, ...req.body, username };
+    if (!username || username.length < 3) {
+      return res.status(400).json({ error: "El usuario debe tener al menos 3 caracteres." });
+    }
+    const detailsError = validateUserDetails(details);
+    if (detailsError) return res.status(400).json({ error: detailsError });
+    const passwordError = validatePasswordConfirmation(req.body);
+    if (passwordError) return res.status(400).json({ error: passwordError });
+    if (users.some((item, itemIndex) => itemIndex !== index && item.username === username)) {
+      return res.status(409).json({ error: "Ese nombre de usuario ya está registrado." });
+    }
+    if (users.some((item, itemIndex) => itemIndex !== index
+      && item.correo?.toLowerCase() === String(details.correo).toLowerCase())) {
+      return res.status(409).json({ error: "Ese correo electrónico ya está registrado." });
+    }
+
+    Object.assign(current, {
+      username,
+      nombre: details.nombre,
+      apellidoPaterno: details.apellidoPaterno,
+      apellidoMaterno: details.apellidoMaterno,
+      diaNacimiento: details.diaNacimiento,
+      mesNacimiento: details.mesNacimiento,
+      anioNacimiento: details.anioNacimiento,
+      genero: details.genero,
+      correo: details.correo,
+      telefono: details.telefono,
+      rol: ["admin", "usuario"].includes(details.rol) ? details.rol : current.rol
+    });
+    if (req.body.password) {
+      if (String(req.body.password).length < 4) {
+        return res.status(400).json({ error: "La contraseña debe tener al menos 4 caracteres." });
+      }
+      current.password = hashPassword(req.body.password);
+    }
+    sessions.forEach((value, token) => {
+      if (value.id === req.params.id) {
+        sessions.set(token, { ...value, username, email: details.correo, rol: current.rol });
+      }
+    });
+    await writeDatabase(database);
+    const { password, ...safeUser } = current;
+    res.json(publicItem(safeUser));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.delete("/api/admin/usuarios/:id", async (req, res, next) => {
+  try {
+    const admin = requireRole(req, res, "admin");
+    if (!admin) return;
+    if (req.params.id === admin.id) {
+      return res.status(400).json({ error: "No puedes eliminar la cuenta con la que estás conectado." });
+    }
+    const database = await readDatabase();
+    const users = usersOf(database);
+    const index = users.findIndex((item) => itemId(item) === req.params.id);
+    if (index === -1) return res.status(404).json({ error: "Usuario no encontrado." });
+    const deletedUser = users[index];
+    const userPurchases = collection(database, "compras")
+      .filter((purchase) => purchase.usuarioId === req.params.id || purchase.usuario === deletedUser.username);
+    for (const purchase of userPurchases) {
+      const concert = collection(database, "conciertos")
+        .find((item) => itemId(item) === purchase.conciertoId);
+      if (!concert) continue;
+      const eventDate = new Date(`${concert.fecha}T${concert.hora || "00:00:00"}`);
+      if (eventDate < new Date()) continue;
+      const ticket = ticketsOf(concert)
+        .find((item) => item.tipo === purchase.tipoBoleto);
+      if (ticket) ticket.disponibles = Number(ticket.disponibles) + Number(purchase.cantidad);
+    }
+    users.splice(index, 1);
+    saveCollection(database, "conciertos", collection(database, "conciertos"));
+    saveCollection(
+      database,
+      "compras",
+      collection(database, "compras").filter((purchase) => (
+        purchase.usuarioId !== req.params.id && purchase.usuario !== deletedUser.username
+      ))
+    );
+    await writeDatabase(database);
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.put("/api/auth/profile", async (req, res, next) => {
   try {
     const sessionUser = requireAuth(req, res);
@@ -422,6 +607,8 @@ app.put("/api/auth/profile", async (req, res, next) => {
     }
     const detailsError = validateUserDetails(details);
     if (detailsError) return res.status(400).json({ error: detailsError });
+    const passwordError = validatePasswordConfirmation(req.body);
+    if (passwordError) return res.status(400).json({ error: passwordError });
     if (users.some((user, userIndex) => userIndex !== index && user.username === username)) {
       return res.status(409).json({ error: "Ese nombre de usuario ya está registrado." });
     }
@@ -489,14 +676,23 @@ app.post("/api/:resource", async (req, res, next) => {
     const database = await readDatabase();
     const requestItem = req.params.resource === "compras"
       ? { conciertoId: req.body.conciertoId, tipoBoleto: req.body.tipoBoleto, cantidad: req.body.cantidad }
-      : req.body;
+      : { ...req.body };
+    if (req.params.resource === "conciertos" && requestItem.imagenData) {
+      requestItem.imagen = await saveUploadedImage(requestItem.imagenData);
+      delete requestItem.imagenData;
+    }
+    delete requestItem.imagenData;
     const validationError = validateItem(req.params.resource, requestItem, database);
     if (validationError) return res.status(400).json({ error: validationError });
 
     const item = { "@_id": randomUUID(), ...requestItem };
     if (req.params.resource === "conciertos") {
       const { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos } = requestItem;
-      Object.assign(item, { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos });
+      Object.assign(item, {
+        nombre, artista, lugar,
+        fecha, hora: requestItem.proximamente ? "" : hora,
+        descripcion, imagen, boletos, proximamente: Boolean(requestItem.proximamente)
+      });
       item.boletos = { boleto: asArray(boletos) };
       for (const field of ["generalPrecio", "generalDisponibles", "vipPrecio", "vipDisponibles"]) {
         delete item[field];
@@ -540,11 +736,24 @@ app.put("/api/:resource/:id", async (req, res, next) => {
 
     const requestItem = req.params.resource === "compras"
       ? { conciertoId: req.body.conciertoId, tipoBoleto: req.body.tipoBoleto, cantidad: req.body.cantidad }
-      : req.body;
+      : { ...req.body };
+    if (req.params.resource === "conciertos" && requestItem.imagenData) {
+      requestItem.imagen = await saveUploadedImage(requestItem.imagenData);
+      delete requestItem.imagenData;
+    }
+    if (req.params.resource === "conciertos" && !requestItem.imagenData && requestItem.imagen === undefined) {
+      requestItem.imagen = items[index].imagen;
+    }
+    delete requestItem.imagenData;
     const updated = { "@_id": req.params.id, ...requestItem };
     if (req.params.resource === "conciertos") {
       const { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos } = requestItem;
-      Object.assign(updated, { nombre, artista, lugar, fecha, hora, descripcion, imagen, boletos: { boleto: asArray(boletos) } });
+      Object.assign(updated, {
+        nombre, artista, lugar,
+        fecha, hora: requestItem.proximamente ? "" : hora,
+        descripcion, imagen, proximamente: Boolean(requestItem.proximamente),
+        boletos: { boleto: asArray(boletos) }
+      });
     }
     if (req.params.resource === "compras") {
       updated.fechaCompra = items[index].fechaCompra;

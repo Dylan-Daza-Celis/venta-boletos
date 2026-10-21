@@ -7,7 +7,7 @@
   <style>
     :root{--bg:#0d0d15;--panel:#191826;--line:#383451;--pink:#ff4f9a;--yellow:#ffd166;--text:#fff9f1;--muted:#aaa6bd}
     *{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 80% 0,#49234c 0,var(--bg) 50%);color:var(--text);font:16px system-ui,sans-serif}
-    .card{width:min(100%,600px);padding:32px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px #0006}.eyebrow{color:var(--yellow);font-size:13px;font-weight:800;letter-spacing:3px}h1{margin:14px 0 8px;color:var(--pink)}form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:24px}label{display:grid;gap:6px;color:var(--muted);font-size:14px}input,select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;background:#10101a;color:var(--text);font:inherit}select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--yellow) 50%),linear-gradient(135deg,var(--yellow) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}.wide{grid-column:1/-1}button{padding:11px 13px;border:0;border-radius:9px;background:var(--yellow);color:#17131b;font:inherit;font-weight:800;cursor:pointer}button.secondary{background:transparent;border:1px solid var(--line);color:var(--text)}.message{min-height:24px;color:var(--yellow)}.actions{display:flex;gap:12px;grid-column:1/-1}
+    .card{width:min(100%,600px);padding:32px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px #0006}.eyebrow{color:var(--yellow);font-size:13px;font-weight:800;letter-spacing:3px}h1{margin:14px 0 8px;color:var(--pink)}form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:24px}label{display:grid;gap:6px;color:var(--muted);font-size:14px}input,select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;background:#10101a;color:var(--text);font:inherit}select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--yellow) 50%),linear-gradient(135deg,var(--yellow) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}.wide{grid-column:1/-1}button{padding:11px 13px;border:0;border-radius:9px;background:var(--yellow);color:#17131b;font:inherit;font-weight:800;cursor:pointer}button.secondary{background:transparent;border:1px solid var(--line);color:var(--text)}.password-field{display:flex;align-items:center;gap:8px}.password-field input{flex:1}.password-toggle{padding:8px 10px;white-space:nowrap}.toast{position:fixed;right:24px;bottom:24px;z-index:10;max-width:calc(100vw - 48px);padding:14px 18px;border:1px solid var(--yellow);border-radius:10px;background:var(--panel);color:var(--text);box-shadow:0 12px 35px #0008;opacity:0;transform:translateY(12px);transition:opacity .2s,transform .2s;pointer-events:none}.toast.visible{opacity:1;transform:translateY(0)}.actions{display:flex;gap:12px;grid-column:1/-1}
     @media(max-width:560px){form{grid-template-columns:1fr}}
   </style>
 </head>
@@ -19,7 +19,8 @@
     <p class="message" id="profile-notice" hidden>Esta cuenta fue creada antes de agregar los datos personales. Completa todos los campos para actualizarla.</p>
     <form id="profile-form" hidden>
       <label>Usuario<input name="username" required minlength="3"></label>
-      <label>Nueva contraseña<input name="password" type="password" minlength="4" autocomplete="new-password"></label>
+      <label>Contraseña <span class="password-field"><input name="password" id="profile-password" type="password" minlength="4" autocomplete="new-password"><button type="button" class="secondary password-toggle" data-password-target="profile-password">Mostrar</button></span></label>
+      <label>Confirmar contraseña <span class="password-field"><input name="confirmPassword" id="profile-confirm-password" type="password" minlength="4"><button type="button" class="secondary password-toggle" data-password-target="profile-confirm-password">Mostrar</button></span></label>
       <label>Nombre<input name="nombre" required></label>
       <label>Apellido paterno<input name="apellidoPaterno" required></label>
       <label>Apellido materno<input name="apellidoMaterno" required></label>
@@ -31,13 +32,15 @@
       <label>Número de celular<input name="telefono" required></label>
       <div class="actions"><button>Actualizar</button><button type="button" class="secondary" onclick="window.location.href='/'">Cancelar</button></div>
     </form>
-    <p class="message" id="message"></p>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </main>
   <script>
-    const $=id=>document.getElementById(id);
+    const $=id=>document.getElementById(id);let toastTimer;
+    function showToast(message){const toast=$("toast");toast.textContent=message;toast.classList.add("visible");clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("visible"),4000)}
+    document.querySelectorAll(".password-toggle").forEach(button=>button.addEventListener("click",()=>{const input=$(button.dataset.passwordTarget);const visible=input.type==="text";input.type=visible?"password":"text";button.textContent=visible?"Mostrar":"Ocultar"}));
     async function api(url,options){const response=await fetch(url,{cache:"no-store",...options});const data=await response.json();if(!response.ok)throw new Error(data.error);return data}
-    async function loadProfile(){try{const profile=await api("/api/auth/me");if(!profile){window.location.href="/login.html?returnTo=%2Fprofile.html";return}const form=$("profile-form");for(const field of ["username","nombre","apellidoPaterno","apellidoMaterno","diaNacimiento","mesNacimiento","anioNacimiento","genero","correo","telefono"]){form.elements[field].value=profile[field]||""}$("profile-notice").hidden=profile.perfilCompleto!==false;form.hidden=false}catch(error){$("message").textContent=error.message}}
-    $("profile-form").addEventListener("submit",async event=>{event.preventDefault();try{await api("/api/auth/profile",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(event.target)))});window.location.href="/"}catch(error){$("message").textContent=error.message}});
+    async function loadProfile(){try{const profile=await api("/api/auth/me");if(!profile){window.location.href="/login.html?returnTo=%2Fprofile.html";return}const form=$("profile-form");for(const field of ["username","nombre","apellidoPaterno","apellidoMaterno","diaNacimiento","mesNacimiento","anioNacimiento","genero","correo","telefono"]){form.elements[field].value=profile[field]||""}$("profile-notice").hidden=profile.perfilCompleto!==false;form.hidden=false}catch(error){showToast(error.message)}}
+    $("profile-form").addEventListener("submit",async event=>{event.preventDefault();const data=Object.fromEntries(new FormData(event.target));if(data.password!==data.confirmPassword){showToast("Las contraseñas no coinciden.");return}try{await api("/api/auth/profile",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});window.location.href="/"}catch(error){showToast(error.message)}});
     loadProfile();
   </script>
 </body>

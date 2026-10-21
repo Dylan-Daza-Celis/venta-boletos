@@ -9,7 +9,9 @@
       <fecha>2026-12-11</fecha>
       <hora>22:00:00</hora>
       <descripcion>UNA NOCHE DE BAILE Y RECUERDOS INOLVIDABLE</descripcion>
-      <imagen>/images/morat.jpeg</imagen>
+      <ticketTipo>VIP</ticketTipo>
+      <ticketPrecio>3000</ticketPrecio>
+      <ticketDisponibles>25</ticketDisponibles>
       <boletos>
         <boleto>
           <tipo>General</tipo>
@@ -19,22 +21,22 @@
         <boleto>
           <tipo>VIP</tipo>
           <precio>3000</precio>
-          <disponibles>0</disponibles>
+          <disponibles>25</disponibles>
         </boleto>
       </boletos>
+      <imagen>/images/5590925d-95b2-47e1-9b38-b1814216c049.jpg</imagen>
+      <proximamente>false</proximamente>
     </concierto>
     <concierto id="7e89e73e-e995-45be-be55-226001dd3288">
       <nombre>CAPUAVENTURES</nombre>
       <artista>Nieto de Capulina</artista>
       <lugar>CU</lugar>
       <fecha>2026-12-12</fecha>
-      <hora>00:00:00</hora>
-      <imagen>/images/capulina.jpg</imagen>
+      <hora>16:53</hora>
       <descripcion>Pasatela bien chicle bomba con el nietototote de capulinitititota</descripcion>
-      <generalPrecio>6700</generalPrecio>
-      <generalDisponibles>670</generalDisponibles>
-      <vipPrecio>6700</vipPrecio>
-      <vipDisponibles>67</vipDisponibles>
+      <ticketTipo>VIP</ticketTipo>
+      <ticketPrecio>6700</ticketPrecio>
+      <ticketDisponibles>67</ticketDisponibles>
       <boletos>
         <boleto>
           <tipo>General</tipo>
@@ -47,15 +49,19 @@
           <disponibles>67</disponibles>
         </boleto>
       </boletos>
+      <imagen>/images/capulina.jpg</imagen>
+      <proximamente>false</proximamente>
     </concierto>
     <concierto id="d937bc11-6db2-4377-8363-759eed44ded3">
       <nombre>Los Guapos</nombre>
       <artista>Mateo Yo Guapo</artista>
       <lugar>GNP</lugar>
       <fecha>2026-02-12</fecha>
-      <hora>21:00:00</hora>
+      <hora>19:53</hora>
       <descripcion>Que me pota, Yo vapo</descripcion>
-      <imagen>/images/mateo.jpg</imagen>
+      <ticketTipo>VIP</ticketTipo>
+      <ticketPrecio>67</ticketPrecio>
+      <ticketDisponibles>66</ticketDisponibles>
       <boletos>
         <boleto>
           <tipo>General</tipo>
@@ -65,25 +71,34 @@
         <boleto>
           <tipo>VIP</tipo>
           <precio>67</precio>
-          <disponibles>66</disponibles>
+          <disponibles>67</disponibles>
         </boleto>
       </boletos>
+      <imagen>/images/mateo.jpg</imagen>
+      <proximamente>false</proximamente>
     </concierto>
   </conciertos>
   <compras>
-    <compra id="c7012054-3d03-497e-9cdd-8c360e3a5c22">
+    <compra id="9f9223c4-8e48-4d51-8b0c-fc4c9eb979c8">
       <conciertoId>878e6df8-b27b-4beb-8390-0bc056b32087</conciertoId>
       <tipoBoleto>VIP</tipoBoleto>
-      <cantidad>3</cantidad>
-      <fechaCompra>2026-10-20T21:49:08.403Z</fechaCompra>
-      <usuarioId>768806c8-86ba-4a3f-ad11-5e18ba05cb13</usuarioId>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-21T01:56:35.335Z</fechaCompra>
+      <usuarioId>188cc93a-44f3-411a-9a1d-839149a33635</usuarioId>
     </compra>
-    <compra id="6fab209b-fa3f-4d24-a788-aa2490881f52">
-      <conciertoId>d937bc11-6db2-4377-8363-759eed44ded3</conciertoId>
+    <compra id="291ea48d-7169-456c-8308-06626a3dd852">
+      <conciertoId>878e6df8-b27b-4beb-8390-0bc056b32087</conciertoId>
       <tipoBoleto>VIP</tipoBoleto>
       <cantidad>1</cantidad>
-      <fechaCompra>2026-10-20T22:01:07.178Z</fechaCompra>
-      <usuarioId>0cbdf491-8f2f-465b-ab33-f1cbe95659e6</usuarioId>
+      <fechaCompra>2026-10-21T01:56:46.334Z</fechaCompra>
+      <usuarioId>188cc93a-44f3-411a-9a1d-839149a33635</usuarioId>
+    </compra>
+    <compra id="2a17b588-8ec8-4074-b75c-43d010d96de6">
+      <conciertoId>878e6df8-b27b-4beb-8390-0bc056b32087</conciertoId>
+      <tipoBoleto>VIP</tipoBoleto>
+      <cantidad>1</cantidad>
+      <fechaCompra>2026-10-21T02:00:15.022Z</fechaCompra>
+      <usuarioId>082b3b3e-1dce-493c-b757-120fa019ec4c</usuarioId>
     </compra>
   </compras>
   <usuarios>
@@ -91,15 +106,6 @@
       <username>admin</username>
       <password>5c1525569ffb8199a2386cfe8a59bdd9:eee00b442c50b74e0cab2fa56b3c3d7c72a4cd4753fcbcd9d00c91bc591caaacbc46b69a1f9864069b296a5c93b1c1d868fdd0b59975ee381f5f2e5d0dde6560</password>
       <rol>admin</rol>
-    </usuario>
-    <usuario id="fb013cae-de6a-400c-8fc4-d9744a0b3dea">
-      <username>dylan</username>
-      <password>a2afb8162d9d1c22b1b50a216d6e8c63:b48b57ed7803473d9e909c3193a52fe3c8dcf6bdd528827d06b4b42c6e989912616cd00053845367c73591d9dbbcb97b69686f82db3535d2af0293bbe5320612</password>
-      <rol>usuario</rol>
-    </usuario>
-    <usuario id="768806c8-86ba-4a3f-ad11-5e18ba05cb13">
-      <username>dylan_clss</username>
-      <password>825c0cebea201985ff4f0c9e3195a875:c81f5da2ff2990f0b0b796b32673bc0c88624fe2872bb76a5bbedde8660d41039f394fc8cdc7951af3b087a708dc98adab8d93da4f52a12fbfbdacb19083cbcd</password>
       <nombre>Dylan</nombre>
       <apellidoPaterno>Daza</apellidoPaterno>
       <apellidoMaterno>Celis</apellidoMaterno>
@@ -109,7 +115,6 @@
       <genero>Hombre</genero>
       <correo>dylancelis6a@gmail.com</correo>
       <telefono>2214403318</telefono>
-      <rol>usuario</rol>
     </usuario>
     <usuario id="0cbdf491-8f2f-465b-ab33-f1cbe95659e6">
       <username>diego</username>
@@ -123,6 +128,34 @@
       <genero>Hombre</genero>
       <correo>diegogonzalezcamarillo@gmail.com</correo>
       <telefono>2202140823</telefono>
+      <rol>admin</rol>
+    </usuario>
+    <usuario id="188cc93a-44f3-411a-9a1d-839149a33635">
+      <username>mili_th</username>
+      <password>bcfc73e5f77923ad27f8de2c4b4b7f53:e8cd5b87fc2b782b3445f0887f4a57b137a9b6c0df67cb366929f8289b8ed4e72ff1b1b732653a4052835a6ab386cb1c7051dcc2d8fe40d47363042d1053bb8d</password>
+      <nombre>Mildreth</nombre>
+      <apellidoPaterno>Daza</apellidoPaterno>
+      <apellidoMaterno>Celis</apellidoMaterno>
+      <diaNacimiento>13</diaNacimiento>
+      <mesNacimiento>7</mesNacimiento>
+      <anioNacimiento>2005</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>mildrethcelis80@gmail.com</correo>
+      <telefono>2224340959</telefono>
+      <rol>usuario</rol>
+    </usuario>
+    <usuario id="082b3b3e-1dce-493c-b757-120fa019ec4c">
+      <username>Donayis</username>
+      <password>53c3aef20d62150fb74c261fc719d3e8:695bf7b7234f1345d48ada4d55fc0af269f864f0831562ee81c46ad9039afcde4b4936ed2f9cd3a13ebea178a690ad07f33d85f7546d404d127d154544325d69</password>
+      <nombre>Donají</nombre>
+      <apellidoPaterno>García</apellidoPaterno>
+      <apellidoMaterno>Domínguez</apellidoMaterno>
+      <diaNacimiento>11</diaNacimiento>
+      <mesNacimiento>12</mesNacimiento>
+      <anioNacimiento>2003</anioNacimiento>
+      <genero>Mujer</genero>
+      <correo>pandagarcia1216@gmail.com</correo>
+      <telefono>2219494949</telefono>
       <rol>usuario</rol>
     </usuario>
   </usuarios>
