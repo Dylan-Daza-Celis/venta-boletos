@@ -209,7 +209,8 @@
     .form {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 12px;
+      column-gap: 12px;
+      row-gap: 20px;
     }
 
     label {
@@ -245,6 +246,27 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
       gap: 22px;
+    }
+
+    .purchase-filter {
+      display: grid;
+      gap: 8px;
+      max-width: 360px;
+      margin-bottom: 22px;
+    }
+
+    .purchase-carousel {
+      display: flex;
+      gap: 22px;
+      overflow-x: auto;
+      padding: 2px 2px 16px;
+      scroll-snap-type: x mandatory;
+      scrollbar-color: var(--pink) var(--panel);
+    }
+
+    .purchase-carousel .purchase {
+      flex: 0 0 min(390px, calc(100vw - 96px));
+      scroll-snap-align: start;
     }
 
     .card {
@@ -361,7 +383,8 @@
     .report-toolbar {
       display: grid;
       grid-template-columns: minmax(220px, 1fr) auto;
-      gap: 14px;
+      column-gap: 20px;
+      row-gap: 18px;
       align-items: end;
       margin-bottom: 18px;
     }
@@ -586,7 +609,7 @@
       <span class="user-status" id="user-status"></span>
       <div class="links">
         <button class="action-button" id="create-event-button" hidden onclick="openEventModal()">Crear evento</button>
-        <a class="action-button" href="/catalogo" target="_blank">Catálogo XSLT</a>
+        <a class="action-button" href="/catalogo">Catálogo XSLT</a>
         <a class="action-button" href="/semantic/conciertos.rdf" target="_blank">Relaciones RDF</a>
         <a class="action-button" href="/profile.html">Editar perfil</a>
       </div>
@@ -692,7 +715,13 @@
 
     <section class="panel">
       <h2>Compras</h2>
-      <div id="purchases" class="cards">
+      <label class="purchase-filter">
+        Filtrar por evento
+        <select id="purchase-event-filter">
+          <option value="">Todos los eventos</option>
+        </select>
+      </label>
+      <div id="purchases" class="purchase-carousel">
         <p class="empty">Todavía no tienes compras registradas.</p>
       </div>
     </section>
@@ -844,8 +873,19 @@
       $("concerts").innerHTML = renderConcertCards(currentConcerts, "Aún no hay eventos actuales.");
       $("upcoming-concerts").innerHTML = renderConcertCards(upcomingConcerts, "Aún no hay eventos próximos.");
       renderReportOptions();
+      renderPurchaseFilter();
       renderUsers();
       renderPurchases();
+    }
+
+    function renderPurchaseFilter() {
+      const select = $("purchase-event-filter");
+      const selected = select.value;
+      select.innerHTML = `
+        <option value="">Todos los eventos</option>
+        ${concerts.map((concert) => `<option value="${concert.id}">${concert.nombre}</option>`).join("")}
+      `;
+      select.value = concerts.some((concert) => concert.id === selected) ? selected : "";
     }
 
     function filteredUsers() {
@@ -1046,7 +1086,11 @@
     }
 
     function renderPurchases() {
-      const cards = purchases.map((purchase) => {
+      const selectedConcertId = $("purchase-event-filter").value;
+      const visiblePurchases = selectedConcertId
+        ? purchases.filter((purchase) => purchase.conciertoId === selectedConcertId)
+        : purchases;
+      const cards = visiblePurchases.map((purchase) => {
         const concert = concerts.find((item) => item.id === purchase.conciertoId);
         const tickets = concert
           ? (Array.isArray(concert.boletos) ? concert.boletos : [concert.boletos])
@@ -1075,7 +1119,7 @@
         `;
       }).join("");
 
-      $("purchases").innerHTML = cards || '<p class="empty">Todavía no tienes compras registradas.</p>';
+      $("purchases").innerHTML = cards || '<p class="empty">No hay compras para el evento seleccionado.</p>';
     }
 
     async function loadAll() {
@@ -1217,6 +1261,7 @@
     $("ticket-select").addEventListener("change", updatePurchaseTotal);
     $("ticket-quantity").addEventListener("input", updatePurchaseTotal);
     $("report-event-select").addEventListener("change", loadEventReport);
+    $("purchase-event-filter").addEventListener("change", renderPurchases);
     $("upcoming-event").addEventListener("change", toggleUpcomingFields);
     $("user-search").addEventListener("input", () => {
       userPage = 1;

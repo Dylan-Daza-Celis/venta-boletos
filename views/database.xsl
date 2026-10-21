@@ -69,6 +69,24 @@
           p { line-height: 1.5; }
           .muted { color: var(--muted); }
 
+          .catalog-link {
+            display: inline-grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            margin-top: 16px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: var(--panel);
+            color: var(--text);
+            font-weight: 800;
+            font-size: 25px;
+            line-height: 1;
+            text-decoration: none;
+          }
+
+          .catalog-link:hover { background: var(--card); }
+
           .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
@@ -128,6 +146,7 @@
           <div class="eyebrow">SONORA · XML + XSLT</div>
           <h1>Catálogo de conciertos</h1>
           <p class="muted">Vista generada con XSLT a partir del almacenamiento XML.</p>
+          <a class="catalog-link" href="/" title="Regresar a la página principal" aria-label="Regresar a la página principal">&#8592;</a>
         </header>
 
         <main>

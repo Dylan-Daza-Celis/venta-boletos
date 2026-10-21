@@ -9,9 +9,9 @@
       <fecha>2026-12-11</fecha>
       <hora>22:00:00</hora>
       <descripcion>UNA NOCHE DE BAILE Y RECUERDOS INOLVIDABLE</descripcion>
-      <ticketTipo>VIP</ticketTipo>
-      <ticketPrecio>3000</ticketPrecio>
-      <ticketDisponibles>25</ticketDisponibles>
+      <ticketTipo>Platino</ticketTipo>
+      <ticketPrecio>3500</ticketPrecio>
+      <ticketDisponibles>50</ticketDisponibles>
       <boletos>
         <boleto>
           <tipo>General</tipo>
@@ -22,6 +22,11 @@
           <tipo>VIP</tipo>
           <precio>3000</precio>
           <disponibles>25</disponibles>
+        </boleto>
+        <boleto>
+          <tipo>Platino</tipo>
+          <precio>3500</precio>
+          <disponibles>50</disponibles>
         </boleto>
       </boletos>
       <imagen>/images/5590925d-95b2-47e1-9b38-b1814216c049.jpg</imagen>
@@ -156,6 +161,20 @@
       <genero>Mujer</genero>
       <correo>pandagarcia1216@gmail.com</correo>
       <telefono>2219494949</telefono>
+      <rol>usuario</rol>
+    </usuario>
+    <usuario id="2f67abd0-2a19-435b-ae71-28474b5237ed">
+      <username>dylxn_clss</username>
+      <password>f2dbd6e3a60a52a459ab11c1e82e15f5:a51960b5970dfc6af966f8bac7dae19da779f5de8213f180436c56107c79a7449f4739b9e54d7ded561a8b8a5dc1b82122c49faefd29598d7d66fd586e830fba</password>
+      <nombre>Dylan</nombre>
+      <apellidoPaterno>Daza</apellidoPaterno>
+      <apellidoMaterno>Celis</apellidoMaterno>
+      <diaNacimiento>17</diaNacimiento>
+      <mesNacimiento>5</mesNacimiento>
+      <anioNacimiento>2004</anioNacimiento>
+      <genero>Hombre</genero>
+      <correo>dylan@correo.com</correo>
+      <telefono>1234567891</telefono>
       <rol>usuario</rol>
     </usuario>
   </usuarios>
